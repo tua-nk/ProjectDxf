@@ -134,6 +134,11 @@ void ArcsDisplay::DrawArc(dvec3& center, double radius, double radStart, double 
 		center + v1 * glm::cos(radStart) + v2 * glm::sin(radStart) :
 		center + v1 * glm::cos(radStart) - v2 * glm::sin(radStart);
 
+	if (radStart > radEnd)
+	{
+		radStart -= 2 * dxflib::mathlib::pi;
+	}
+
 	for (double a = radStart + angle_q; a < radEnd; a += angle_q)
 	{
 		dvec3 p2 = ccw ?

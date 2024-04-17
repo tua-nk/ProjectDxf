@@ -157,6 +157,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="3rdparty\imgui\imgui\misc\debuggers\imgui.natstepfilter" />
+    <None Include="res\line.frag" />
+    <None Include="res\line.vert" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="3rdparty\imgui\imgui\misc\debuggers\imgui.natvis" />
