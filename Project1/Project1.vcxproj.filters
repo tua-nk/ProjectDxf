@@ -80,8 +80,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="3rdparty\imgui\imgui\misc\debuggers\imgui.natstepfilter" />
-    <None Include="res\line.frag" />
-    <None Include="res\line.vert" />
+    <None Include="res\line.fs" />
+    <None Include="res\line.vs" />
+    <None Include="res\axis.fs" />
+    <None Include="res\axis.vs" />
+    <None Include="res\arrow.gs" />
+    <None Include="res\arrow.vs" />
+    <None Include="res\arrow.fs" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="3rdparty\imgui\imgui\misc\debuggers\imgui.natvis" />

@@ -9,7 +9,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <iomanip>
 #include <functional>
+#include <unordered_map>
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm.hpp"
 #include "gtx\transform.hpp"
@@ -22,13 +24,33 @@
 
 #include "Cadfile.h"
 
+void gassert_()
+{
+    if (glGetError() != GL_NO_ERROR)
+    {
+        std::string error;
+        auto er = glGetError();
+        switch (er)
+        {
+        case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
+        case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
+        case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
+        case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
+        case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
+        case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
+        case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
+        }
+
+        std::cout << error;
+    }
+}
 
 using dvec3 = glm::dvec3;
 using dvec2 = glm::dvec2;
 using mat4 = glm::mat4;
 
 enum class KeyState {
-	Up, Down, JustPressed, JustReleased
+    Up, Down, JustPressed, JustReleased
 };
 
 std::unordered_map<int, KeyState> keyStates;
@@ -36,236 +58,316 @@ double mouseScrollX = 0, mouseScrollY = 0;
 bool cursorMoved = false;
 dvec2 currentCursor(0), lastCursor(0);
 
+struct WindowInfo {
+    bool glInit = false;
+    bool resized = false;
+    void NewFrameState() {
+        resized = false;
+    }
+};
+
 void CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 {
-	cursorMoved = true;
-	currentCursor = dvec2(xpos, ypos);
+    cursorMoved = true;
+    currentCursor = dvec2(xpos, ypos);
 }
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-	if (action == GLFW_PRESS)
-	{
-		keyStates[button] = KeyState::JustPressed;
-	}
-	else if (action == GLFW_RELEASE)
-	{
-		keyStates[button] = KeyState::JustReleased;
-	}
+    if (action == GLFW_PRESS)
+    {
+        keyStates[button] = KeyState::JustPressed;
+    }
+    else if (action == GLFW_RELEASE)
+    {
+        keyStates[button] = KeyState::JustReleased;
+    }
 }
 
 void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	mouseScrollY = yoffset;
-	mouseScrollX = xoffset;
+    mouseScrollY = yoffset;
+    mouseScrollX = xoffset;
+}
+
+void WindowSizeCallback(GLFWwindow* window, int width, int height)
+{
+    WindowInfo* winInfo = static_cast<WindowInfo*>(glfwGetWindowUserPointer(window));
+    if (winInfo)
+    {
+        if (winInfo->glInit)
+        {
+            int frameW, frameH;
+            glfwGetFramebufferSize(window, &frameW, &frameH);
+            glViewport(0, 0, frameW, frameH);
+        }
+        winInfo->resized = true;
+    }
 }
 
 void NewFrameInputStates() {
-	for (auto it = keyStates.begin(); it != keyStates.end(); ++it)
-	{
-		if (it->second == KeyState::JustPressed)
-		{
-			it->second = KeyState::Down;
-		}
-		else if (it->second == KeyState::JustReleased)
-		{
-			it->second = KeyState::Up;
-		}
-	}
-	cursorMoved = false;
-	lastCursor = currentCursor;
-	mouseScrollX = mouseScrollY = 0;
+    for (auto it = keyStates.begin(); it != keyStates.end(); ++it)
+    {
+        if (it->second == KeyState::JustPressed)
+        {
+            it->second = KeyState::Down;
+        }
+        else if (it->second == KeyState::JustReleased)
+        {
+            it->second = KeyState::Up;
+        }
+    }
+    cursorMoved = false;
+    lastCursor = currentCursor;
+    mouseScrollX = mouseScrollY = 0;
 }
 
 bool IsDown(int button)
 {
-	return keyStates[button] == KeyState::Down || keyStates[button] == KeyState::JustPressed;
+    return keyStates[button] == KeyState::Down || keyStates[button] == KeyState::JustPressed;
 }
 
 void Play(GLFWwindow* window);
 
 int main(void)
 {
-	GLFWwindow* window;
+    GLFWwindow* window;
 
-	if (!glfwInit())
-		return -1;
+    if (!glfwInit())
+        return -1;
 
-	window = glfwCreateWindow(800, 600, "Hello World", NULL, NULL);
-	if (!window)
-	{
-		glfwTerminate();
-		return -1;
-	}
+    window = glfwCreateWindow(800, 600, "Hello World", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        return -1;
+    }
 
-	glfwMakeContextCurrent(window);
-	
-	glfwSetMouseButtonCallback(window, MouseButtonCallback);
-	glfwSetCursorPosCallback(window, CursorPosCallback);
-	glfwSetScrollCallback(window, MouseScrollCallback);
+    glfwMakeContextCurrent(window);
 
-	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    WindowInfo windowInfo;
+    glfwSetWindowUserPointer(window, &windowInfo);
 
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-	ImGui::StyleColorsDark();
+    glfwSetMouseButtonCallback(window, MouseButtonCallback);
+    glfwSetCursorPosCallback(window, CursorPosCallback);
+    glfwSetScrollCallback(window, MouseScrollCallback);
+    glfwSetWindowSizeCallback(window, WindowSizeCallback);
 
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init();
+    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    windowInfo.glInit = true;
 
-	// play program
-	Play(window);
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    ImGui::StyleColorsDark();
 
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init();
 
-	glfwDestroyWindow(window);
+    // play program
+    Play(window);
 
-	glfwTerminate();
-	return 0;
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(window);
+
+    glfwTerminate();
+    return 0;
 }
 
 void Play(GLFWwindow* window)
 {
-	LinesDisplay linesDisplay;
-	ArcsDisplay arcsDisplay;
+    WindowInfo* winInfo = static_cast<WindowInfo*>(glfwGetWindowUserPointer(window));
+    LinesDisplay linesDisplay;
+    ArcsDisplay arcsDisplay;
 
-	RotateCamera rotateCamera;
+    RotateCamera rotateCamera;
 
-	double viewDistance = 5.0;
-	glm::dquat rotation(dvec3(0.0, 0.0, 0.0));
-	float dist = 5.0f;
-	rotateCamera.projMat = glm::perspective(45.0, 4.0 / 3.0, 0.0001, 10000.0);
-	rotateCamera.rotMat = glm::toMat4(rotation);
-	rotateCamera.postRotTransMat = glm::translate(dvec3(0, 0, -5.0));
-	rotateCamera.preRotTransMat = glm::translate(dvec3(0));
-	rotateCamera.SetDistance(viewDistance);
+    glm::dquat rotation(dvec3(0.0, 0.0, 0.0));
+    rotateCamera.rotMat = glm::toMat4(rotation);
 
-	HWND win32window = glfwGetWin32Window(window);
-	OPENFILENAMEA ofn;
-	CHAR szFile[MAX_PATH] = { 0 };
+    rotateCamera.postRotTransMat = glm::translate(dvec3(0, 0, -5.0));
+    rotateCamera.preRotTransMat = glm::translate(dvec3(0));
 
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = NULL;
-	ofn.lpstrFile = szFile;
-	ofn.lpstrFile[0] = '\0';
-	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = "(*.dxf)\0*.dxf\0";
+    double viewDistance = 5.0;
+    rotateCamera.SetDistance(viewDistance);
 
-	ofn.nFilterIndex = 1;
-	ofn.lpstrInitialDir = NULL;
-	ofn.lpstrTitle = "Select a File";
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
+    rotateCamera.fov = 45.0;
+    {
+        int w, h;
+        glfwGetWindowSize(window, &w, &h);
+        rotateCamera.aspect = double(w) / h;
+        rotateCamera.zNear = 0.0001;
+        rotateCamera.zFar = 10000.0;
+        rotateCamera.CreatePerspectiveProjection();
+    }
+
+    HWND win32window = glfwGetWin32Window(window);
+    OPENFILENAMEA ofn;
+    CHAR szFile[MAX_PATH] = { 0 };
+    CHAR fileTitle[256] = { 0 };
+
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFile = szFile;
+    ofn.lpstrFile[0] = '\0';
+    ofn.nMaxFile = sizeof(szFile);
+    ofn.lpstrFilter = "(*.dxf)\0*.dxf\0";
+    ofn.lpstrFileTitle = fileTitle;
+    ofn.nMaxFileTitle = 256;
+    ofn.nFilterIndex = 1;
+    ofn.lpstrInitialDir = NULL;
+    ofn.lpstrTitle = "Select a File";
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
+
+    AxisDisplay axisDisplay;
+    axisDisplay.SetPos(-0.75, -0.75);
+    axisDisplay.SetSize(0.4);
+
+    std::string imageInfo;
+
+    while (!glfwWindowShouldClose(window))
+    {
+        if (cursorMoved && keyStates[GLFW_MOUSE_BUTTON_LEFT] == KeyState::Down)
+        {
+            dvec2 cursorChange = currentCursor - lastCursor;
+            dvec3 currentRight = dvec3(1.0, 0.0, 0) * rotation, currentUp = dvec3(0, 1.0, 0) * rotation;
+            rotation *= glm::angleAxis(glm::radians(cursorChange.y), currentRight) * glm::angleAxis(glm::radians(cursorChange.x), currentUp);
+
+            rotateCamera.SetRotation(rotation);
+        }
+        if (mouseScrollY)
+        {
+            rotateCamera.SetDistance(rotateCamera.viewDistance * (1.0 - 0.01 * mouseScrollY));
+        }
+        if (winInfo->resized)
+        {
+            int fbW, fbH;
+            glfwGetFramebufferSize(window, &fbW, &fbH);
+            rotateCamera.aspect = double(fbW) / fbH;
+            rotateCamera.CreatePerspectiveProjection();
+        }
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+        linesDisplay.Display(rotateCamera);
+        arcsDisplay.Display(rotateCamera);
+        axisDisplay.Display(rotateCamera);
 
-	while (!glfwWindowShouldClose(window))
-	{
-		if (cursorMoved && keyStates[GLFW_MOUSE_BUTTON_LEFT] == KeyState::Down)
-		{
-			dvec2 cursorChange = currentCursor - lastCursor;
-			dvec3 currentRight = dvec3(1.0, 0.0, 0) * rotation, currentUp = dvec3(0, 1.0, 0) * rotation;
-			rotation *= glm::angleAxis(glm::radians(cursorChange.y), currentRight) * glm::angleAxis(glm::radians(cursorChange.x), currentUp);
-
-			rotateCamera.SetRotation(rotation);
-		}
-		if (mouseScrollY)
-		{
-			rotateCamera.SetDistance(rotateCamera.viewDistance * (1.0 - 0.01 * mouseScrollY));
-		}
-
-		glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
 
-		linesDisplay.Display(rotateCamera);
-		arcsDisplay.Display(rotateCamera);
+        ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiCond_FirstUseEver);
 
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
+        if (ImGui::Begin("Debug", nullptr, window_flags))
+        {
+            if (ImGui::Button("Button"))
+            {
+                if (GetOpenFileNameA(&ofn) == TRUE)
+                {
+                    linesDisplay.Clear();
+                    arcsDisplay.Clear();
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+                    std::wcout << szFile << std::endl;
+                    dxflib::cadfile test(szFile);
 
-		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiCond_FirstUseEver);
+                    std::vector<dxflib::entities::line>& lines = test.get_lines();
+                    const std::vector<dxflib::entities::arc>& arcs = test.get_arcs();
+                    const std::vector<dxflib::entities::circle>& circles = test.get_circles();
 
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
-		if (ImGui::Begin("Debug", nullptr, window_flags))
-		{
-			if (ImGui::Button("Button"))
-			{
-				if (GetOpenFileNameA(&ofn) == TRUE)
-				{
-					linesDisplay.Clear();
-					arcsDisplay.Clear();
+                    std::stringstream ss;
+                    //ss << std::setprecision(2);
+                    for (auto& line : lines)
+                    {
+                        ss << "- Line (" << line.get_vertex(0).x << ", " << line.get_vertex(0).y
+                            << "), (" << line.get_vertex(0).x << ", " << line.get_vertex(1).y << ")\n";
+                    }
+                    for (auto& circle : circles)
+                    {
+                        ss << "- Circle (" << circle.get_center_point().x << ", " << circle.get_center_point().y << "), " << circle.get_radius() << "\n";
+                    }
+                    for (auto& arc : arcs)
+                    {
+                        ss << "- Arc (" << arc.get_center_point().x << ", " << arc.get_center_point().y << "), " << arc.get_radius()
+                            << ", " << arc.get_start_angle() << ", " << arc.get_end_angle() << "\n";
+                    }
 
-					std::wcout << szFile << std::endl;
-					dxflib::cadfile test(szFile);
+                    imageInfo = ss.str();
 
-					std::vector<dxflib::entities::line>& lines = test.get_lines();
-					const std::vector<dxflib::entities::arc>& arcs = test.get_arcs();
-					const std::vector<dxflib::entities::circle>& circles = test.get_circles();
+                    dvec3 min_p{}, max_p{};
 
-					dvec3 min_p{}, max_p{};
+                    for (auto& line : lines)
+                    {
+                        linesDisplay.DrawLine(line);
+                        min_p.x = min(line.get_vertex(0).x, min_p.x);
+                        min_p.x = min(line.get_vertex(1).x, min_p.x);
+                        min_p.y = min(line.get_vertex(0).y, min_p.y);
+                        min_p.y = min(line.get_vertex(1).y, min_p.y);
 
-					for (auto& line : lines)
-					{
-						linesDisplay.DrawLine(line);
-						min_p.x = min(line.get_vertex(0).x, min_p.x);
-						min_p.x = min(line.get_vertex(1).x, min_p.x);
-						min_p.y = min(line.get_vertex(0).y, min_p.y);
-						min_p.y = min(line.get_vertex(1).y, min_p.y);
+                        max_p.x = max(line.get_vertex(0).x, max_p.x);
+                        max_p.x = max(line.get_vertex(1).x, max_p.x);
+                        max_p.y = max(line.get_vertex(0).y, max_p.y);
+                        max_p.y = max(line.get_vertex(1).y, max_p.y);
+                    }
 
-						max_p.x = max(line.get_vertex(0).x, max_p.x);
-						max_p.x = max(line.get_vertex(1).x, max_p.x);
-						max_p.y = max(line.get_vertex(0).y, max_p.y);
-						max_p.y = max(line.get_vertex(1).y, max_p.y);
-					}
+                    for (auto& arc : arcs)
+                    {
+                        arcsDisplay.DrawArc(arc);
 
-					for (auto& arc : arcs)
-					{
-						arcsDisplay.DrawArc(arc);
+                        min_p.x = min(arc.get_center_point().x, min_p.x);
+                        min_p.y = min(arc.get_center_point().y, min_p.y);
+                        max_p.x = max(arc.get_center_point().x, max_p.x);
+                        max_p.y = max(arc.get_center_point().y, max_p.y);
+                    }
 
-						min_p.x = min(arc.get_center_point().x, min_p.x);
-						min_p.y = min(arc.get_center_point().y, min_p.y);
-						max_p.x = max(arc.get_center_point().x, max_p.x);
-						max_p.y = max(arc.get_center_point().y, max_p.y);
-					}
+                    for (auto& circle : circles)
+                    {
+                        arcsDisplay.DrawArc(circle);
 
-					for (auto& circle : circles)
-					{
-						arcsDisplay.DrawArc(circle);
+                        min_p.x = min(circle.get_center_point().x, min_p.x);
+                        min_p.y = min(circle.get_center_point().y, min_p.y);
+                        max_p.x = max(circle.get_center_point().x, max_p.x);
+                        max_p.y = max(circle.get_center_point().y, max_p.y);
+                    }
+                    rotateCamera.SetCenter(dvec3(min_p + max_p) * 0.5);
+                    viewDistance = glm::length(max_p - min_p);
+                    rotateCamera.SetDistance(viewDistance);
 
-						min_p.x = min(circle.get_center_point().x, min_p.x);
-						min_p.y = min(circle.get_center_point().y, min_p.y);
-						max_p.x = max(circle.get_center_point().x, max_p.x);
-						max_p.y = max(circle.get_center_point().y, max_p.y);
-					}
-					rotateCamera.SetCenter(dvec3(min_p + max_p) * 0.5);
-					viewDistance = glm::length(max_p - min_p);
-					rotateCamera.SetDistance(viewDistance);
+                }
+            }
 
-				}
-			}
+            ImGui::End();
+            ImGui::SetNextWindowSize(ImVec2(300, 200));
+            if (fileTitle[0]) 
+            {
+                ImGui::Begin(&fileTitle[0], nullptr);
+            }
+            else
+            {
+                ImGui::Begin("image", nullptr);
+            }
+            ImGui::TextWrapped(imageInfo.c_str());
+            ImGui::End();
+        }
 
-			ImGui::End();
-		}
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		//if (ImGui::DragFloat("dist", &dist))
-		//{
-		//	linesDisplay.SetDistance((double)dist);
-		//}
+        glfwSwapBuffers(window);
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        winInfo->NewFrameState();
+        NewFrameInputStates();
+        glfwPollEvents();
 
-		glfwSwapBuffers(window);
-
-		NewFrameInputStates();
-		glfwPollEvents();
-	}
+    }
 }
