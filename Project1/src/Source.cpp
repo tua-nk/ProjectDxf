@@ -279,11 +279,11 @@ void Play(GLFWwindow* window)
                     arcsDisplay.Clear();
 
                     std::wcout << szFile << std::endl;
-                    dxflib::cadfile test(szFile);
+                    dxflib::cadfile dxf(szFile);
 
-                    std::vector<dxflib::entities::line>& lines = test.get_lines();
-                    const std::vector<dxflib::entities::arc>& arcs = test.get_arcs();
-                    const std::vector<dxflib::entities::circle>& circles = test.get_circles();
+                    std::vector<dxflib::entities::line>& lines = dxf.get_lines();
+                    const std::vector<dxflib::entities::arc>& arcs = dxf.get_arcs();
+                    const std::vector<dxflib::entities::circle>& circles = dxf.get_circles();
 
                     std::stringstream ss;
                     for (auto& line : lines)
@@ -354,7 +354,7 @@ void Play(GLFWwindow* window)
             }
             else
             {
-                ImGui::Begin("image", nullptr, window_flags);
+                ImGui::Begin("Image", nullptr, window_flags);
             }
             ImGui::TextWrapped(imageInfo.c_str());
             ImGui::End();
