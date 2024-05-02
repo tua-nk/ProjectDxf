@@ -126,6 +126,18 @@ void LinesDisplay::SetScale(double s)
     offsetScaleMat[2][2] *= scale;
 }
 
+RotateCamera::RotateCamera()
+{
+    projMat = mat4(0.0);
+    preRotTransMat = mat4(0.0);
+    postRotTransMat = mat4(0.0);
+    rotMat = mat4(0.0);
+    viewDistance = 0.0;
+    fov = 0.0;
+    aspect = 0.0;
+    zNear = 0.0;
+    zFar = 0.0;
+}
 
 void RotateCamera::SetDistance(double d) {
     viewDistance = glm::abs(d);

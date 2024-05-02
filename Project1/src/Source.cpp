@@ -286,7 +286,6 @@ void Play(GLFWwindow* window)
                     const std::vector<dxflib::entities::circle>& circles = test.get_circles();
 
                     std::stringstream ss;
-                    //ss << std::setprecision(2);
                     for (auto& line : lines)
                     {
                         ss << "- Line (" << line.get_vertex(0).x << ", " << line.get_vertex(0).y

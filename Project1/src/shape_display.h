@@ -14,6 +14,7 @@ inline dvec3 dfxlibToGlm(const dxflib::entities::vertex& v) {
 
 class RotateCamera {
 public:
+    RotateCamera();
     void SetDistance(double d);
     void SetRotation(glm::quat q);
     void SetCenter(dvec3 center);
