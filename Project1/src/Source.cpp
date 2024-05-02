@@ -265,7 +265,7 @@ void Play(GLFWwindow* window)
         ImGui::NewFrame();
 
 
-        ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowPos(ImVec2(0, 250), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiCond_FirstUseEver);
 
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
@@ -346,14 +346,15 @@ void Play(GLFWwindow* window)
             }
 
             ImGui::End();
-            ImGui::SetNextWindowSize(ImVec2(300, 200));
+            ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+            ImGui::SetNextWindowSize(ImVec2(200, 250));
             if (fileTitle[0]) 
             {
-                ImGui::Begin(&fileTitle[0], nullptr);
+                ImGui::Begin(&fileTitle[0], nullptr, window_flags);
             }
             else
             {
-                ImGui::Begin("image", nullptr);
+                ImGui::Begin("image", nullptr, window_flags);
             }
             ImGui::TextWrapped(imageInfo.c_str());
             ImGui::End();
