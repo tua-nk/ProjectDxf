@@ -95,8 +95,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)3rdparty\imgui\imgui;$(ProjectDir)3rdparty\glm-1.0.1\glm;$(ProjectDir)3rdparty\imgui-filebrowser-master;$(ProjectDir)..\dxflib++\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)3rdparty\imgui\imgui;$(ProjectDir)3rdparty\glm-1.0.1\glm;$(ProjectDir)3rdparty\imgui-filebrowser-master;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4996;6031;6387</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glfw3.lib;glfw3dll.lib;glfw3_mt.lib;..\x64\Debug\dxflib++.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -123,7 +124,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)3rdparty\imgui\imgui;$(ProjectDir)3rdparty\glm-1.0.1\glm;$(ProjectDir)3rdparty\imgui-filebrowser-master;$(ProjectDir)..\dxflib++\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)3rdparty\imgui\imgui;$(ProjectDir)3rdparty\glm-1.0.1\glm;$(ProjectDir)3rdparty\imgui-filebrowser-master;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4996;6031;6387</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -141,6 +143,97 @@
     <ClCompile Include="3rdparty\imgui\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\gl_obj.cpp" />
+    <ClCompile Include="src\libdxf\3dface.c" />
+    <ClCompile Include="src\libdxf\3dline.c" />
+    <ClCompile Include="src\libdxf\3dsolid.c" />
+    <ClCompile Include="src\libdxf\acad_proxy_entity.c" />
+    <ClCompile Include="src\libdxf\appid.c" />
+    <ClCompile Include="src\libdxf\arc.c" />
+    <ClCompile Include="src\libdxf\attdef.c" />
+    <ClCompile Include="src\libdxf\attrib.c" />
+    <ClCompile Include="src\libdxf\binary_data.c" />
+    <ClCompile Include="src\libdxf\binary_entity_data.c" />
+    <ClCompile Include="src\libdxf\binary_graphics_data.c" />
+    <ClCompile Include="src\libdxf\block.c" />
+    <ClCompile Include="src\libdxf\block_record.c" />
+    <ClCompile Include="src\libdxf\body.c" />
+    <ClCompile Include="src\libdxf\circle.c" />
+    <ClCompile Include="src\libdxf\class.c" />
+    <ClCompile Include="src\libdxf\color.c" />
+    <ClCompile Include="src\libdxf\comment.c" />
+    <ClCompile Include="src\libdxf\dictionary.c" />
+    <ClCompile Include="src\libdxf\dictionaryvar.c" />
+    <ClCompile Include="src\libdxf\dimension.c" />
+    <ClCompile Include="src\libdxf\dimstyle.c" />
+    <ClCompile Include="src\libdxf\donut.c" />
+    <ClCompile Include="src\libdxf\drawing.c" />
+    <ClCompile Include="src\libdxf\ellipse.c" />
+    <ClCompile Include="src\libdxf\endblk.c" />
+    <ClCompile Include="src\libdxf\endsec.c" />
+    <ClCompile Include="src\libdxf\endtab.c" />
+    <ClCompile Include="src\libdxf\entities.c" />
+    <ClCompile Include="src\libdxf\entity.c" />
+    <ClCompile Include="src\libdxf\file.c" />
+    <ClCompile Include="src\libdxf\group.c" />
+    <ClCompile Include="src\libdxf\hatch.c" />
+    <ClCompile Include="src\libdxf\header.c" />
+    <ClCompile Include="src\libdxf\helix.c" />
+    <ClCompile Include="src\libdxf\idbuffer.c" />
+    <ClCompile Include="src\libdxf\image.c" />
+    <ClCompile Include="src\libdxf\imagedef.c" />
+    <ClCompile Include="src\libdxf\imagedef_reactor.c" />
+    <ClCompile Include="src\libdxf\insert.c" />
+    <ClCompile Include="src\libdxf\layer.c" />
+    <ClCompile Include="src\libdxf\layer_index.c" />
+    <ClCompile Include="src\libdxf\layer_name.c" />
+    <ClCompile Include="src\libdxf\leader.c" />
+    <ClCompile Include="src\libdxf\light.c" />
+    <ClCompile Include="src\libdxf\line.c" />
+    <ClCompile Include="src\libdxf\ltype.c" />
+    <ClCompile Include="src\libdxf\lwpolyline.c" />
+    <ClCompile Include="src\libdxf\mesh.c" />
+    <ClCompile Include="src\libdxf\mleader.c" />
+    <ClCompile Include="src\libdxf\mleaderstyle.c" />
+    <ClCompile Include="src\libdxf\mline.c" />
+    <ClCompile Include="src\libdxf\mlinestyle.c" />
+    <ClCompile Include="src\libdxf\mtext.c" />
+    <ClCompile Include="src\libdxf\object.c" />
+    <ClCompile Include="src\libdxf\object_id.c" />
+    <ClCompile Include="src\libdxf\object_ptr.c" />
+    <ClCompile Include="src\libdxf\ole2frame.c" />
+    <ClCompile Include="src\libdxf\oleframe.c" />
+    <ClCompile Include="src\libdxf\point.c" />
+    <ClCompile Include="src\libdxf\polyline.c" />
+    <ClCompile Include="src\libdxf\proprietary_data.c" />
+    <ClCompile Include="src\libdxf\rastervariables.c" />
+    <ClCompile Include="src\libdxf\ray.c" />
+    <ClCompile Include="src\libdxf\region.c" />
+    <ClCompile Include="src\libdxf\rtext.c" />
+    <ClCompile Include="src\libdxf\section.c" />
+    <ClCompile Include="src\libdxf\seqend.c" />
+    <ClCompile Include="src\libdxf\shape.c" />
+    <ClCompile Include="src\libdxf\solid.c" />
+    <ClCompile Include="src\libdxf\sortentstable.c" />
+    <ClCompile Include="src\libdxf\spatial_filter.c" />
+    <ClCompile Include="src\libdxf\spatial_index.c" />
+    <ClCompile Include="src\libdxf\spline.c" />
+    <ClCompile Include="src\libdxf\style.c" />
+    <ClCompile Include="src\libdxf\sun.c" />
+    <ClCompile Include="src\libdxf\surface.c" />
+    <ClCompile Include="src\libdxf\table.c" />
+    <ClCompile Include="src\libdxf\tables.c" />
+    <ClCompile Include="src\libdxf\text.c" />
+    <ClCompile Include="src\libdxf\thumbnail.c" />
+    <ClCompile Include="src\libdxf\tolerance.c" />
+    <ClCompile Include="src\libdxf\trace.c" />
+    <ClCompile Include="src\libdxf\ucs.c" />
+    <ClCompile Include="src\libdxf\util.c" />
+    <ClCompile Include="src\libdxf\vertex.c" />
+    <ClCompile Include="src\libdxf\view.c" />
+    <ClCompile Include="src\libdxf\viewport.c" />
+    <ClCompile Include="src\libdxf\vport.c" />
+    <ClCompile Include="src\libdxf\xline.c" />
+    <ClCompile Include="src\libdxf\xrecord.c" />
     <ClCompile Include="src\shape_display.cpp" />
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
@@ -153,6 +246,101 @@
     <ClInclude Include="3rdparty\imgui\imgui\imstb_textedit.h" />
     <ClInclude Include="3rdparty\imgui\imgui\imstb_truetype.h" />
     <ClInclude Include="src\gl_obj.h" />
+    <ClInclude Include="src\libdxf\3dface.h" />
+    <ClInclude Include="src\libdxf\3dline.h" />
+    <ClInclude Include="src\libdxf\3dsolid.h" />
+    <ClInclude Include="src\libdxf\acad_proxy_entity.h" />
+    <ClInclude Include="src\libdxf\appid.h" />
+    <ClInclude Include="src\libdxf\arc.h" />
+    <ClInclude Include="src\libdxf\attdef.h" />
+    <ClInclude Include="src\libdxf\attrib.h" />
+    <ClInclude Include="src\libdxf\binary_data.h" />
+    <ClInclude Include="src\libdxf\binary_entity_data.h" />
+    <ClInclude Include="src\libdxf\binary_graphics_data.h" />
+    <ClInclude Include="src\libdxf\block.h" />
+    <ClInclude Include="src\libdxf\block_record.h" />
+    <ClInclude Include="src\libdxf\body.h" />
+    <ClInclude Include="src\libdxf\circle.h" />
+    <ClInclude Include="src\libdxf\class.h" />
+    <ClInclude Include="src\libdxf\color.h" />
+    <ClInclude Include="src\libdxf\comment.h" />
+    <ClInclude Include="src\libdxf\dbg.h" />
+    <ClInclude Include="src\libdxf\dictionary.h" />
+    <ClInclude Include="src\libdxf\dictionaryvar.h" />
+    <ClInclude Include="src\libdxf\dimension.h" />
+    <ClInclude Include="src\libdxf\dimstyle.h" />
+    <ClInclude Include="src\libdxf\donut.h" />
+    <ClInclude Include="src\libdxf\drawing.h" />
+    <ClInclude Include="src\libdxf\dxf.h" />
+    <ClInclude Include="src\libdxf\ellipse.h" />
+    <ClInclude Include="src\libdxf\endblk.h" />
+    <ClInclude Include="src\libdxf\endsec.h" />
+    <ClInclude Include="src\libdxf\endtab.h" />
+    <ClInclude Include="src\libdxf\entities.h" />
+    <ClInclude Include="src\libdxf\entity.h" />
+    <ClInclude Include="src\libdxf\file.h" />
+    <ClInclude Include="src\libdxf\global.h" />
+    <ClInclude Include="src\libdxf\group.h" />
+    <ClInclude Include="src\libdxf\hatch.h" />
+    <ClInclude Include="src\libdxf\header.h" />
+    <ClInclude Include="src\libdxf\helix.h" />
+    <ClInclude Include="src\libdxf\idbuffer.h" />
+    <ClInclude Include="src\libdxf\image.h" />
+    <ClInclude Include="src\libdxf\imagedef.h" />
+    <ClInclude Include="src\libdxf\imagedef_reactor.h" />
+    <ClInclude Include="src\libdxf\insert.h" />
+    <ClInclude Include="src\libdxf\layer.h" />
+    <ClInclude Include="src\libdxf\layer_index.h" />
+    <ClInclude Include="src\libdxf\layer_name.h" />
+    <ClInclude Include="src\libdxf\leader.h" />
+    <ClInclude Include="src\libdxf\light.h" />
+    <ClInclude Include="src\libdxf\line.h" />
+    <ClInclude Include="src\libdxf\ltype.h" />
+    <ClInclude Include="src\libdxf\lwpolyline.h" />
+    <ClInclude Include="src\libdxf\mesh.h" />
+    <ClInclude Include="src\libdxf\mleader.h" />
+    <ClInclude Include="src\libdxf\mleaderstyle.h" />
+    <ClInclude Include="src\libdxf\mline.h" />
+    <ClInclude Include="src\libdxf\mlinestyle.h" />
+    <ClInclude Include="src\libdxf\mtext.h" />
+    <ClInclude Include="src\libdxf\object.h" />
+    <ClInclude Include="src\libdxf\object_id.h" />
+    <ClInclude Include="src\libdxf\object_ptr.h" />
+    <ClInclude Include="src\libdxf\ole2frame.h" />
+    <ClInclude Include="src\libdxf\oleframe.h" />
+    <ClInclude Include="src\libdxf\param.h" />
+    <ClInclude Include="src\libdxf\point.h" />
+    <ClInclude Include="src\libdxf\polyline.h" />
+    <ClInclude Include="src\libdxf\proprietary_data.h" />
+    <ClInclude Include="src\libdxf\rastervariables.h" />
+    <ClInclude Include="src\libdxf\ray.h" />
+    <ClInclude Include="src\libdxf\region.h" />
+    <ClInclude Include="src\libdxf\rtext.h" />
+    <ClInclude Include="src\libdxf\section.h" />
+    <ClInclude Include="src\libdxf\seqend.h" />
+    <ClInclude Include="src\libdxf\shape.h" />
+    <ClInclude Include="src\libdxf\solid.h" />
+    <ClInclude Include="src\libdxf\sortentstable.h" />
+    <ClInclude Include="src\libdxf\spatial_filter.h" />
+    <ClInclude Include="src\libdxf\spatial_index.h" />
+    <ClInclude Include="src\libdxf\spline.h" />
+    <ClInclude Include="src\libdxf\style.h" />
+    <ClInclude Include="src\libdxf\sun.h" />
+    <ClInclude Include="src\libdxf\surface.h" />
+    <ClInclude Include="src\libdxf\table.h" />
+    <ClInclude Include="src\libdxf\tables.h" />
+    <ClInclude Include="src\libdxf\text.h" />
+    <ClInclude Include="src\libdxf\thumbnail.h" />
+    <ClInclude Include="src\libdxf\tolerance.h" />
+    <ClInclude Include="src\libdxf\trace.h" />
+    <ClInclude Include="src\libdxf\ucs.h" />
+    <ClInclude Include="src\libdxf\util.h" />
+    <ClInclude Include="src\libdxf\vertex.h" />
+    <ClInclude Include="src\libdxf\view.h" />
+    <ClInclude Include="src\libdxf\viewport.h" />
+    <ClInclude Include="src\libdxf\vport.h" />
+    <ClInclude Include="src\libdxf\xline.h" />
+    <ClInclude Include="src\libdxf\xrecord.h" />
     <ClInclude Include="src\shape_display.h" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +352,8 @@
     <None Include="res\axis.vs" />
     <None Include="res\line.fs" />
     <None Include="res\line.vs" />
+    <None Include="src\libdxf\libdxf.pc.in" />
+    <None Include="src\libdxf\Makefile.am" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="3rdparty\imgui\imgui\misc\debuggers\imgui.natvis" />

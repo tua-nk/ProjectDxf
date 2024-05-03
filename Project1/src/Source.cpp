@@ -1,3 +1,4 @@
+#include "libdxf/dxf.h"
 #include <glad\glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
@@ -21,8 +22,6 @@
 #include <GLFW/glfw3native.h>
 #include <commdlg.h>
 #include "shape_display.h"
-
-#include "Cadfile.h"
 
 void gassert_()
 {
@@ -279,68 +278,71 @@ void Play(GLFWwindow* window)
                     arcsDisplay.Clear();
 
                     std::wcout << szFile << std::endl;
-                    dxflib::cadfile dxf(szFile);
+                    //DxfFile* dxf = dxf_read_init(szFile);
 
-                    std::vector<dxflib::entities::line>& lines = dxf.get_lines();
-                    const std::vector<dxflib::entities::arc>& arcs = dxf.get_arcs();
-                    const std::vector<dxflib::entities::circle>& circles = dxf.get_circles();
 
-                    std::stringstream ss;
-                    for (auto& line : lines)
-                    {
-                        ss << "- Line (" << line.get_vertex(0).x << ", " << line.get_vertex(0).y
-                            << "), (" << line.get_vertex(0).x << ", " << line.get_vertex(1).y << ")\n";
-                    }
-                    for (auto& circle : circles)
-                    {
-                        ss << "- Circle (" << circle.get_center_point().x << ", " << circle.get_center_point().y << "), " << circle.get_radius() << "\n";
-                    }
-                    for (auto& arc : arcs)
-                    {
-                        ss << "- Arc (" << arc.get_center_point().x << ", " << arc.get_center_point().y << "), " << arc.get_radius()
-                            << ", " << arc.get_start_angle() << ", " << arc.get_end_angle() << "\n";
-                    }
+                    //dxflib::cadfile dxf(szFile);
 
-                    imageInfo = ss.str();
+                    //std::vector<dxflib::entities::line>& lines = dxf.get_lines();
+                    //const std::vector<dxflib::entities::arc>& arcs = dxf.get_arcs();
+                    //const std::vector<dxflib::entities::circle>& circles = dxf.get_circles();
 
-                    dvec3 min_p{}, max_p{};
+                    //std::stringstream ss;
+                    //for (auto& line : lines)
+                    //{
+                    //    ss << "- Line (" << line.get_vertex(0).x << ", " << line.get_vertex(0).y
+                    //        << "), (" << line.get_vertex(0).x << ", " << line.get_vertex(1).y << ")\n";
+                    //}
+                    //for (auto& circle : circles)
+                    //{
+                    //    ss << "- Circle (" << circle.get_center_point().x << ", " << circle.get_center_point().y << "), " << circle.get_radius() << "\n";
+                    //}
+                    //for (auto& arc : arcs)
+                    //{
+                    //    ss << "- Arc (" << arc.get_center_point().x << ", " << arc.get_center_point().y << "), " << arc.get_radius()
+                    //        << ", " << arc.get_start_angle() << ", " << arc.get_end_angle() << "\n";
+                    //}
 
-                    for (auto& line : lines)
-                    {
-                        linesDisplay.DrawLine(line);
-                        min_p.x = min(line.get_vertex(0).x, min_p.x);
-                        min_p.x = min(line.get_vertex(1).x, min_p.x);
-                        min_p.y = min(line.get_vertex(0).y, min_p.y);
-                        min_p.y = min(line.get_vertex(1).y, min_p.y);
+                    //imageInfo = ss.str();
 
-                        max_p.x = max(line.get_vertex(0).x, max_p.x);
-                        max_p.x = max(line.get_vertex(1).x, max_p.x);
-                        max_p.y = max(line.get_vertex(0).y, max_p.y);
-                        max_p.y = max(line.get_vertex(1).y, max_p.y);
-                    }
+                    //dvec3 min_p{}, max_p{};
 
-                    for (auto& arc : arcs)
-                    {
-                        arcsDisplay.DrawArc(arc);
+                    //for (auto& line : lines)
+                    //{
+                    //    linesDisplay.DrawLine(line);
+                    //    min_p.x = min(line.get_vertex(0).x, min_p.x);
+                    //    min_p.x = min(line.get_vertex(1).x, min_p.x);
+                    //    min_p.y = min(line.get_vertex(0).y, min_p.y);
+                    //    min_p.y = min(line.get_vertex(1).y, min_p.y);
 
-                        min_p.x = min(arc.get_center_point().x, min_p.x);
-                        min_p.y = min(arc.get_center_point().y, min_p.y);
-                        max_p.x = max(arc.get_center_point().x, max_p.x);
-                        max_p.y = max(arc.get_center_point().y, max_p.y);
-                    }
+                    //    max_p.x = max(line.get_vertex(0).x, max_p.x);
+                    //    max_p.x = max(line.get_vertex(1).x, max_p.x);
+                    //    max_p.y = max(line.get_vertex(0).y, max_p.y);
+                    //    max_p.y = max(line.get_vertex(1).y, max_p.y);
+                    //}
 
-                    for (auto& circle : circles)
-                    {
-                        arcsDisplay.DrawArc(circle);
+                    //for (auto& arc : arcs)
+                    //{
+                    //    arcsDisplay.DrawArc(arc);
 
-                        min_p.x = min(circle.get_center_point().x, min_p.x);
-                        min_p.y = min(circle.get_center_point().y, min_p.y);
-                        max_p.x = max(circle.get_center_point().x, max_p.x);
-                        max_p.y = max(circle.get_center_point().y, max_p.y);
-                    }
-                    rotateCamera.SetCenter(dvec3(min_p + max_p) * 0.5);
-                    viewDistance = glm::length(max_p - min_p);
-                    rotateCamera.SetDistance(viewDistance);
+                    //    min_p.x = min(arc.get_center_point().x, min_p.x);
+                    //    min_p.y = min(arc.get_center_point().y, min_p.y);
+                    //    max_p.x = max(arc.get_center_point().x, max_p.x);
+                    //    max_p.y = max(arc.get_center_point().y, max_p.y);
+                    //}
+
+                    //for (auto& circle : circles)
+                    //{
+                    //    arcsDisplay.DrawArc(circle);
+
+                    //    min_p.x = min(circle.get_center_point().x, min_p.x);
+                    //    min_p.y = min(circle.get_center_point().y, min_p.y);
+                    //    max_p.x = max(circle.get_center_point().x, max_p.x);
+                    //    max_p.y = max(circle.get_center_point().y, max_p.y);
+                    //}
+                    //rotateCamera.SetCenter(dvec3(min_p + max_p) * 0.5);
+                    //viewDistance = glm::length(max_p - min_p);
+                    //rotateCamera.SetDistance(viewDistance);
 
                 }
             }

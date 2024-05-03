@@ -1,16 +1,15 @@
 #pragma once
 #include "glm.hpp"
-#include "Cadfile.h"
-
+#include <vector>
 
 using dvec3 = glm::dvec3;
 using dvec4 = glm::dvec4;
 using dvec2 = glm::dvec2;
 using mat4 = glm::mat4;
 
-inline dvec3 dfxlibToGlm(const dxflib::entities::vertex& v) {
-    return dvec3(v.x, v.y, v.z);
-}
+//inline dvec3 dfxlibToGlm(const dxflib::entities::vertex& v) {
+//    return dvec3(v.x, v.y, v.z);
+//}
 
 class RotateCamera {
 public:
@@ -28,7 +27,7 @@ class LinesDisplay {
 public:
     LinesDisplay();
     ~LinesDisplay();
-    void DrawLine(dxflib::entities::line& line, dvec4 color = { 1.0,1.0,1.0,1.0 });
+    //void DrawLine(dxflib::entities::line& line, dvec4 color = { 1.0,1.0,1.0,1.0 });
     void DrawLine(dvec3& start, dvec3& end, dvec4 color = { 1.0,1.0,1.0,1.0 });
     void Clear();
     void SetOffset(double x, double y);
@@ -55,8 +54,8 @@ public:
     void Display(RotateCamera& camera);
     void Clear();
     void DrawArc(dvec3& center, double radius, double radStart, double radEnd, bool ccw = true);
-    void DrawArc(const dxflib::entities::arc& arc);
-    void DrawArc(const dxflib::entities::circle& circle);
+    //void DrawArc(const dxflib::entities::arc& arc);
+    //void DrawArc(const dxflib::entities::circle& circle);
 
     LinesDisplay linesDisplay;
 };

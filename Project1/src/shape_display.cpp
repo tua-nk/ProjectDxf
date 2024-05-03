@@ -87,12 +87,12 @@ void LinesDisplay::DrawLine(dvec3& start, dvec3& end, dvec4 color) {
     glBindVertexArray(0);
 }
 
-void LinesDisplay::DrawLine(dxflib::entities::line& line, dvec4 color) {
-    const auto& vstart = line.get_vertex(0), vend = line.get_vertex(1);
-
-    dvec3 start(vstart.x, vstart.y, vstart.z), end(vend.x, vend.y, vend.z);
-    DrawLine(start, end, color);
-}
+//void LinesDisplay::DrawLine(dxflib::entities::line& line, dvec4 color) {
+//    const auto& vstart = line.get_vertex(0), vend = line.get_vertex(1);
+//
+//    dvec3 start(vstart.x, vstart.y, vstart.z), end(vend.x, vend.y, vend.z);
+//    DrawLine(start, end, color);
+//}
 
 void LinesDisplay::Clear() {
     glBindVertexArray(linesVAO);
@@ -175,10 +175,10 @@ void ArcsDisplay::DrawArc(dvec3& center, double radius, double radStart, double 
         center + v1 * glm::cos(radStart) + v2 * glm::sin(radStart) :
         center + v1 * glm::cos(radStart) - v2 * glm::sin(radStart);
 
-    if (radStart > radEnd)
-    {
-        radStart -= 2 * dxflib::mathlib::pi;
-    }
+    //if (radStart > radEnd)
+    //{
+    //    radStart -= 2 * dxflib::mathlib::pi;
+    //}
 
     for (double a = radStart + angle_q; a < radEnd; a += angle_q)
     {
@@ -197,18 +197,18 @@ void ArcsDisplay::DrawArc(dvec3& center, double radius, double radStart, double 
     linesDisplay.DrawLine(p1, p2);
 }
 
-void ArcsDisplay::DrawArc(const dxflib::entities::arc& arc)
-{
-    dvec3 center = dfxlibToGlm(arc.get_center_point());
-
-    DrawArc(center, arc.get_radius(), glm::radians(arc.get_start_angle()), glm::radians(arc.get_end_angle()), arc.is_counterclock_wise());
-}
-
-
-void ArcsDisplay::DrawArc(const dxflib::entities::circle& circle)
-{
-    DrawArc(dfxlibToGlm(circle.get_center_point()), circle.get_radius(), 0, glm::pi<double>() * 2);
-}
+//void ArcsDisplay::DrawArc(const dxflib::entities::arc& arc)
+//{
+//    dvec3 center = dfxlibToGlm(arc.get_center_point());
+//
+//    DrawArc(center, arc.get_radius(), glm::radians(arc.get_start_angle()), glm::radians(arc.get_end_angle()), arc.is_counterclock_wise());
+//}
+//
+//
+//void ArcsDisplay::DrawArc(const dxflib::entities::circle& circle)
+//{
+//    DrawArc(dfxlibToGlm(circle.get_center_point()), circle.get_radius(), 0, glm::pi<double>() * 2);
+//}
 
 void ArcsDisplay::Display(RotateCamera& camera)
 {
