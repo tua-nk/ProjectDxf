@@ -3,6 +3,11 @@
 #include "mathlib.h"
 #include <ostream>
 
+dxflib::entities::point_base::point_base(point_buffer& pb):
+	x(pb.point_x), y(pb.point_y), z(pb.point_z)
+{
+}
+
 dxflib::entities::point_base::point_base(const double x, const double y, const double z):
 	x(x), y(y), z(z)
 {
@@ -10,6 +15,43 @@ dxflib::entities::point_base::point_base(const double x, const double y, const d
 
 dxflib::entities::vertex::vertex(const double x, const double y, const double z) :
 	point_base(x, y, z)
+{
+}
+
+int dxflib::entities::point_buffer::parse(const std::string& cl, const std::string& nl)
+{
+	int code{entity_buffer_base::parse(cl, nl)}; // group code of the current line
+	if (code == -1)
+		return 1;
+	// Parse switch;
+	switch (static_cast<group_codes::point>(code))
+	{
+	case group_codes::point::point_x:
+		point_x = std::stod(nl);
+		return 1;
+
+	case group_codes::point::point_y:
+		point_y = std::stod(nl);
+		return 1;
+
+	case group_codes::point::point_z:
+		point_z = std::stod(nl);
+		return 1;
+
+	default:
+		return 0;
+	}
+}
+
+void dxflib::entities::point_buffer::free()
+{
+	entity_buffer_base::free();
+	point_x = 0;
+	point_y = 0;
+	point_z = 0;
+}
+
+dxflib::entities::vertex::vertex(point_buffer& pb) :point_base(pb)
 {
 }
 

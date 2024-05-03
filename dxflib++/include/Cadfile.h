@@ -36,6 +36,10 @@ namespace dxflib
 		const std::vector<entities::arc>& get_arcs() const { return arcs_; }
 		// Circle
 		const std::vector<entities::circle>& get_circles() const { return circles_; }
+		// Point
+		const std::vector<entities::point_base>& get_points() const { return points_; }
+		// Vertex
+		const std::vector<entities::vertex>& get_vertexs() const { return vertex_; }
 		// Filename of the DXF file
 		std::string get_filename() const { return std::string{filename_}; }
 		// DXF Data
@@ -49,6 +53,8 @@ namespace dxflib
 		std::vector<entities::text> basic_text_; // TEXT Entities
 		std::vector<entities::arc> arcs_; // ARC Entities
 		std::vector<entities::circle> circles_; // CIRCLE Entities
+		std::vector<entities::point_base> points_; // POINT Entities
+		std::vector<entities::vertex> vertex_; // VERTEX Entities
 
 		void read_file(); // Reads the file that is stored in filename_
 		void parse_data(); // Main parse function for the dxf file: iterates through the data_ vector and
@@ -81,6 +87,8 @@ namespace dxflib
 			const char* mtext{"MTEXT"};
 			const char* arc{ "ARC" };
 			const char* circle{ "CIRCLE" };
+			const char* point{ "POINT" };
+			const char* vertex{ "VERTEX" };
 		};
 	}
 }

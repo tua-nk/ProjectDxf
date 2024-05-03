@@ -16,6 +16,8 @@ namespace dxflib::entities
 		text,
 		arc,
 		circle,
+		point,
+		vertex,
 		all
 	};
 

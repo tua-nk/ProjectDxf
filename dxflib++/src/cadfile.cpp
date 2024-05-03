@@ -67,6 +67,9 @@ void dxflib::cadfile::parse_data()
 	entities::text_buffer tb;        // Text Buffer
 	entities::arc_buffer ab;
 	entities::circle_buffer cb;      // Circle Buffer
+	entities::point_buffer pb;       // Point Buffer
+	entities::point_buffer vb;       // Vertex Buffer
+	
 
 	for (int linenum{0}; linenum < static_cast<int>(data_.size()) - 1; ++linenum)
 	{
@@ -115,6 +118,18 @@ void dxflib::cadfile::parse_data()
 				current_entity = entities::entity_types::circle;
 				continue;
 			}
+			if (cl == start_markers.point)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::point;
+				continue;
+			}
+			if (cl == start_markers.vertex)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::vertex;
+				continue;
+			}
 		}
 		/*
 		 * Extraction Path - While the extraction flag is true and the current entity
@@ -147,6 +162,14 @@ void dxflib::cadfile::parse_data()
 				break;
 			case entities::entity_types::circle:
 				if (cb.parse(cl, nl))
+					linenum++;
+				break;
+			case entities::entity_types::point:
+				if (pb.parse(cl, nl))
+					linenum++;
+				break;
+			case entities::entity_types::vertex:
+				if (vb.parse(cl, nl))
 					linenum++;
 				break;
 			default:
@@ -189,6 +212,16 @@ void dxflib::cadfile::parse_data()
 			case entities::entity_types::circle:
 				circles_.emplace_back(cb);
 				cb.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::point:
+				points_.emplace_back(pb);
+				pb.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::vertex:
+				vertex_.emplace_back(vb);
+				vb.free();
 				extraction_flag = false;
 				break;
 			case entities::entity_types::all:
