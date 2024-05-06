@@ -2,6 +2,7 @@
 #include "entities/entity.h"
 #include "entities/line.h"
 #include "entities/lwpolyline.h"
+#include "entities/polyline.h"
 #include "entities/text.h"
 #include "entities/arc.h"
 #include "entities/circle.h"
@@ -63,6 +64,7 @@ void dxflib::cadfile::parse_data()
 	// Buffers
 	entities::line_buf lb;           // Line Buffer
 	entities::lwpolyline_buffer lwb; // Lwpolyline Buffer
+	entities::polyline_buffer plb;   // Polyline Buffer
 	entities::hatch_buffer hb;       // Hatch Buffer
 	entities::text_buffer tb;        // Text Buffer
 	entities::arc_buffer ab;
@@ -92,6 +94,12 @@ void dxflib::cadfile::parse_data()
 			{
 				extraction_flag = true;
 				current_entity = entities::entity_types::lwpolyline;
+				continue;
+			}
+			if (cl == start_markers.polyline)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::polyline;
 				continue;
 			}
 			if (cl == start_markers.hatch)
@@ -148,6 +156,10 @@ void dxflib::cadfile::parse_data()
 				if (lwb.parse(cl, nl))
 					linenum++;
 				break;
+			case entities::entity_types::polyline:
+				if (plb.parse(cl, nl))
+					linenum++;
+				break;
 			case entities::entity_types::hatch:
 				if (hb.parse(cl, nl))
 					linenum++;
@@ -192,6 +204,11 @@ void dxflib::cadfile::parse_data()
 			case entities::entity_types::lwpolyline:
 				lwpolylines_.emplace_back(lwb);
 				lwb.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::polyline:
+				polylines_.emplace_back(plb);
+				plb.free();
 				extraction_flag = false;
 				break;
 			case entities::entity_types::hatch:

@@ -1,5 +1,6 @@
 #include "entities/point.h"
 #include "entities/lwpolyline.h"
+#include "entities/polyline.h"
 #include "mathlib.h"
 #include <ostream>
 
@@ -56,6 +57,13 @@ dxflib::entities::vertex::vertex(point_buffer& pb) :point_base(pb)
 }
 
 bool dxflib::entities::vertex::within(const lwpolyline& pl) const
+{
+	if (!pl.is_closed())
+		return false;
+	return mathlib::winding_num(pl.get_lines(), *this) != 0;
+}
+
+bool dxflib::entities::vertex::within(const polyline& pl) const
 {
 	if (!pl.is_closed())
 		return false;

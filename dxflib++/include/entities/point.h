@@ -5,6 +5,7 @@
 namespace dxflib::entities
 {
 	class lwpolyline;
+	class polyline;
 	class geoline;
 
 	namespace group_codes
@@ -57,6 +58,7 @@ namespace dxflib::entities
 		*/
 		explicit vertex(double x = 0, double y = 0, double z = 0);
 		bool within(const lwpolyline& pl) const;
+		bool within(const polyline& pl) const;
 		bool within(const std::vector<geoline>& gl_vector) const;
 		bool operator==(const vertex& other) const;
 	};

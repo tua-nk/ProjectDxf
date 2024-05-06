@@ -3,6 +3,7 @@
 //#include "dxflib++/include/entities/lwpolyline.h"
 #include "entities/line.h"
 #include "entities/lwpolyline.h"
+#include "entities/polyline.h"
 #include "entities/arc.h"
 #include "entities/circle.h"
 #include "entities/hatch.h"
@@ -28,6 +29,8 @@ namespace dxflib
 		std::vector<entities::line>& get_lines() { return lines_; }
 		// lwpolylines
 		std::vector<entities::lwpolyline>& get_lwpolylines() { return lwpolylines_; }
+		// polylines
+		std::vector<entities::polyline>& get_polylines() { return polylines_; }
 		// hatches
 		std::vector<entities::hatch>& get_hatches() { return hatches_; }
 		// Text
@@ -49,6 +52,7 @@ namespace dxflib
 		// Entities
 		std::vector<entities::line> lines_; // LINE Entities
 		std::vector<entities::lwpolyline> lwpolylines_; // LWPOLYLINE Entities
+		std::vector<entities::polyline> polylines_; // LWPOLYLINE Entities
 		std::vector<entities::hatch> hatches_; // HATCH Entities
 		std::vector<entities::text> basic_text_; // TEXT Entities
 		std::vector<entities::arc> arcs_; // ARC Entities
@@ -82,6 +86,7 @@ namespace dxflib
 		{
 			const char* line{"LINE"};
 			const char* lwpolyline{"LWPOLYLINE"};
+			const char* polyline{ "POLYLINE" };
 			const char* hatch{"HATCH"};
 			const char* text{"TEXT"};
 			const char* mtext{"MTEXT"};

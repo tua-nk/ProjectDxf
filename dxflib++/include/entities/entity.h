@@ -12,6 +12,7 @@ namespace dxflib::entities
 	{
 		line,
 		lwpolyline,
+		polyline,
 		hatch,
 		text,
 		arc,
