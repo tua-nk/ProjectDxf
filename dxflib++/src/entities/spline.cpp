@@ -8,7 +8,7 @@
  * \param nl Next spline
  * \return status -> 1: sucess, 0: no success
  */
-int dxflib::entities::spline_buf::parse(const std::string& cl, const std::string& nl)
+int dxflib::entities::spline_buffer::parse(const std::string& cl, const std::string& nl)
 {
 	using namespace group_codes;
 	int code{entity_buffer_base::parse(cl, nl)};
@@ -45,7 +45,7 @@ int dxflib::entities::spline_buf::parse(const std::string& cl, const std::string
 	}
 }
 
-void dxflib::entities::spline_buf::free()
+void dxflib::entities::spline_buffer::free()
 {
 	entity_buffer_base::free();
 	x0 = 0;
@@ -61,7 +61,7 @@ void dxflib::entities::spline_buf::free()
  * \brief Spline buffer constructor for the spline entity
  * \param lb Spline Buffer
  */
-dxflib::entities::spline::spline(spline_buf& lb) :
+dxflib::entities::spline::spline(spline_buffer& lb) :
 	entity(lb),
 	v0_(lb.x0, lb.y0, lb.z0),
 	v1_(lb.x1, lb.y1, lb.z1),

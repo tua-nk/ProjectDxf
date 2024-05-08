@@ -7,7 +7,7 @@ namespace dxflib::entities
 	/**
 	* \brief Spline buffer struct
 	*/
-	struct spline_buf : entity_buffer_base
+	struct spline_buffer : entity_buffer_base
 	{
 		double x0, y0, z0;
 		double x1, y1, z1;
@@ -50,7 +50,7 @@ namespace dxflib::entities
 	{
 	public:
 		// Constructor
-		explicit spline(spline_buf&);
+		explicit spline(spline_buffer&);
 
 		// public interface
 		const vertex& get_vertex(int id) const; // Returns the vertex given by it's id

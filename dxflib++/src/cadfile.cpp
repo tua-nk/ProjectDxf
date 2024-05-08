@@ -67,11 +67,14 @@ void dxflib::cadfile::parse_data()
 	entities::polyline_buffer plb;   // Polyline Buffer
 	entities::hatch_buffer hb;       // Hatch Buffer
 	entities::text_buffer tb;        // Text Buffer
-	entities::arc_buffer ab;
+	entities::arc_buffer ab;         // Arc Buffer
 	entities::circle_buffer cb;      // Circle Buffer
 	entities::point_buffer pb;       // Point Buffer
 	entities::point_buffer vb;       // Vertex Buffer
-	
+	entities::solid_bufer sb;        // Solid Buffer
+	entities::solid3d_buffer s3b;    // Solid3d Buffer
+	entities::ellipse_buffer eb;     // Ellipse Buffer
+	entities::spline_buffer slb;     // Spline Buffer
 
 	for (int linenum{0}; linenum < static_cast<int>(data_.size()) - 1; ++linenum)
 	{
@@ -138,6 +141,30 @@ void dxflib::cadfile::parse_data()
 				current_entity = entities::entity_types::vertex;
 				continue;
 			}
+			if (cl == start_markers.solid)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::solid;
+				continue;
+			}
+			if (cl == start_markers.solid3d)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::solid3d;
+				continue;
+			}
+			if (cl == start_markers.ellipse)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::ellipse;
+				continue;
+			}
+			if (cl == start_markers.spline)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::spline;
+				continue;
+			}
 		}
 		/*
 		 * Extraction Path - While the extraction flag is true and the current entity
@@ -182,6 +209,22 @@ void dxflib::cadfile::parse_data()
 				break;
 			case entities::entity_types::vertex:
 				if (vb.parse(cl, nl))
+					linenum++;
+				break;
+			case entities::entity_types::solid:
+				if (sb.parse(cl, nl))
+					linenum++;
+				break;
+			case entities::entity_types::solid3d:
+				if (s3b.parse(cl, nl))
+					linenum++;
+				break;
+			case entities::entity_types::ellipse:
+				if (eb.parse(cl, nl))
+					linenum++;
+				break;
+			case entities::entity_types::spline:
+				if (slb.parse(cl, nl))
 					linenum++;
 				break;
 			default:
@@ -237,8 +280,28 @@ void dxflib::cadfile::parse_data()
 				extraction_flag = false;
 				break;
 			case entities::entity_types::vertex:
-				vertex_.emplace_back(vb);
+				vertexes_.emplace_back(vb);
 				vb.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::solid:
+				solids_.emplace_back(sb);
+				sb.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::solid3d:
+				solid3ds_.emplace_back(s3b);
+				s3b.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::ellipse:
+				ellipses_.emplace_back(eb);
+				eb.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::spline:
+				splines_.emplace_back(slb);
+				slb.free();
 				extraction_flag = false;
 				break;
 			case entities::entity_types::all:

@@ -46,7 +46,15 @@ namespace dxflib
 		// Point
 		const std::vector<entities::point_base>& get_points() const { return points_; }
 		// Vertex
-		const std::vector<entities::vertex>& get_vertexs() const { return vertex_; }
+		const std::vector<entities::vertex>& get_vertexs() const { return vertexes_; }
+		// Solid
+		const std::vector<entities::solid>& get_solids() const { return solids_; }
+		// Solid3d
+		const std::vector<entities::solid3d>& get_solid3d() const { return solid3ds_; }
+		// Ellipse
+		const std::vector<entities::ellipse>& get_ellipses() const { return ellipses_; }
+		// Spline
+		const std::vector<entities::spline>& get_splines() const { return splines_; }
 		// Filename of the DXF file
 		std::string get_filename() const { return std::string{filename_}; }
 		// DXF Data
@@ -62,7 +70,11 @@ namespace dxflib
 		std::vector<entities::arc> arcs_; // ARC Entities
 		std::vector<entities::circle> circles_; // CIRCLE Entities
 		std::vector<entities::point_base> points_; // POINT Entities
-		std::vector<entities::vertex> vertex_; // VERTEX Entities
+		std::vector<entities::vertex> vertexes_; // VERTEX Entities
+		std::vector<entities::solid> solids_; // SOLID Entities
+		std::vector<entities::solid3d> solid3ds_; // 3DSOLID Entities
+		std::vector<entities::ellipse> ellipses_; // ELLIPSE Entities
+		std::vector<entities::spline> splines_; // SPLINE Entities
 
 		void read_file(); // Reads the file that is stored in filename_
 		void parse_data(); // Main parse function for the dxf file: iterates through the data_ vector and
@@ -98,6 +110,10 @@ namespace dxflib
 			const char* circle{ "CIRCLE" };
 			const char* point{ "POINT" };
 			const char* vertex{ "VERTEX" };
+			const char* solid{ "SOLID" };
+			const char* solid3d{ "3DSOLID" };
+			const char* ellipse{ "ELLIPSE" };
+			const char* spline{ "SPLINE" };
 		};
 	}
 }

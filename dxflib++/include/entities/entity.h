@@ -19,6 +19,10 @@ namespace dxflib::entities
 		circle,
 		point,
 		vertex,
+		solid,
+		solid3d,
+		ellipse,
+		spline,
 		all
 	};
 

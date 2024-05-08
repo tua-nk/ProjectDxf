@@ -7,7 +7,7 @@ namespace dxflib::entities
 	/**
 	* \brief Solid buffer struct
 	*/
-	struct solid_buf : entity_buffer_base
+	struct solid_bufer : entity_buffer_base
 	{
 		double x0, y0, z0;
 		double x1, y1, z1;
@@ -50,7 +50,7 @@ namespace dxflib::entities
 	{
 	public:
 		// Constructor
-		explicit solid(solid_buf&);
+		explicit solid(solid_bufer&);
 
 		// public interface
 		const vertex& get_vertex(int id) const; // Returns the vertex given by it's id

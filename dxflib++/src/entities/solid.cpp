@@ -8,7 +8,7 @@
  * \param nl Next solid
  * \return status -> 1: sucess, 0: no success
  */
-int dxflib::entities::solid_buf::parse(const std::string& cl, const std::string& nl)
+int dxflib::entities::solid_bufer::parse(const std::string& cl, const std::string& nl)
 {
 	using namespace group_codes;
 	int code{entity_buffer_base::parse(cl, nl)};
@@ -45,7 +45,7 @@ int dxflib::entities::solid_buf::parse(const std::string& cl, const std::string&
 	}
 }
 
-void dxflib::entities::solid_buf::free()
+void dxflib::entities::solid_bufer::free()
 {
 	entity_buffer_base::free();
 	x0 = 0;
@@ -61,7 +61,7 @@ void dxflib::entities::solid_buf::free()
  * \brief Solid buffer constructor for the solid entity
  * \param lb Solid Buffer
  */
-dxflib::entities::solid::solid(solid_buf& lb) :
+dxflib::entities::solid::solid(solid_bufer& lb) :
 	entity(lb),
 	v0_(lb.x0, lb.y0, lb.z0),
 	v1_(lb.x1, lb.y1, lb.z1),

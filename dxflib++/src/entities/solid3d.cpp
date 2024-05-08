@@ -8,7 +8,7 @@
  * \param nl Next solid3d
  * \return status -> 1: sucess, 0: no success
  */
-int dxflib::entities::solid3d_buf::parse(const std::string& cl, const std::string& nl)
+int dxflib::entities::solid3d_buffer::parse(const std::string& cl, const std::string& nl)
 {
 	using namespace group_codes;
 	int code{entity_buffer_base::parse(cl, nl)};
@@ -45,7 +45,7 @@ int dxflib::entities::solid3d_buf::parse(const std::string& cl, const std::strin
 	}
 }
 
-void dxflib::entities::solid3d_buf::free()
+void dxflib::entities::solid3d_buffer::free()
 {
 	entity_buffer_base::free();
 	x0 = 0;
@@ -61,7 +61,7 @@ void dxflib::entities::solid3d_buf::free()
  * \brief solid3d buffer constructor for the solid3d entity
  * \param lb solid3d Buffer
  */
-dxflib::entities::solid3d::solid3d(solid3d_buf& lb) :
+dxflib::entities::solid3d::solid3d(solid3d_buffer& lb) :
 	entity(lb),
 	v0_(lb.x0, lb.y0, lb.z0),
 	v1_(lb.x1, lb.y1, lb.z1),
