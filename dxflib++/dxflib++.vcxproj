@@ -147,14 +147,18 @@
   <ItemGroup>
     <ClInclude Include="include\app.h" />
     <ClInclude Include="include\Cadfile.h" />
+    <ClInclude Include="include\entities\solid3d.h" />
     <ClInclude Include="include\entities\arc.h" />
     <ClInclude Include="include\entities\circle.h" />
+    <ClInclude Include="include\entities\ellipse.h" />
     <ClInclude Include="include\entities\entity.h" />
     <ClInclude Include="include\entities\hatch.h" />
     <ClInclude Include="include\entities\line.h" />
     <ClInclude Include="include\entities\lwpolyline.h" />
     <ClInclude Include="include\entities\point.h" />
     <ClInclude Include="include\entities\polyline.h" />
+    <ClInclude Include="include\entities\solid.h" />
+    <ClInclude Include="include\entities\spline.h" />
     <ClInclude Include="include\entities\text.h" />
     <ClInclude Include="include\mathlib.h" />
     <ClInclude Include="include\utilities.h" />
@@ -163,12 +167,16 @@
     <ClCompile Include="src\cadfile.cpp" />
     <ClCompile Include="src\entities\arc.cpp" />
     <ClCompile Include="src\entities\circle.cpp" />
+    <ClCompile Include="src\entities\ellipse.cpp" />
     <ClCompile Include="src\entities\entitiy.cpp" />
     <ClCompile Include="src\entities\hatch.cpp" />
     <ClCompile Include="src\entities\line.cpp" />
     <ClCompile Include="src\entities\lwpolyline.cpp" />
     <ClCompile Include="src\entities\point.cpp" />
     <ClCompile Include="src\entities\polyline.cpp" />
+    <ClCompile Include="src\entities\solid.cpp" />
+    <ClCompile Include="src\entities\solid3d.cpp" />
+    <ClCompile Include="src\entities\spline.cpp" />
     <ClCompile Include="src\entities\text.cpp" />
     <ClCompile Include="src\mathlib\vector.cpp" />
     <ClCompile Include="src\utilities\color.cpp" />

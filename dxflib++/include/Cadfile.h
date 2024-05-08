@@ -8,6 +8,10 @@
 #include "entities/circle.h"
 #include "entities/hatch.h"
 #include "entities/text.h"
+#include "entities/solid3d.h"
+#include "entities/solid.h"
+#include "entities/ellipse.h"
+#include "entities/spline.h"
 #include <vector>
 
 namespace dxflib
