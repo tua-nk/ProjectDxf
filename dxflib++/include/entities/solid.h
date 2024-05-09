@@ -11,7 +11,7 @@ namespace dxflib::entities
 	{
 		double x0, y0, z0;
 		double x1, y1, z1;
-		double thickness;
+		double x2, y2, z2;
 
 		/**
 		 * \brief Parse function for solid buffer
@@ -32,13 +32,15 @@ namespace dxflib::entities
 		{
 			subclassmarker = 100,
 			error = -1,
-			thickness = 39,
 			x0 = 10,
 			x1 = 11,
+			x2 = 12,
 			y0 = 20,
 			y1 = 21,
+			y2 = 22,
 			z0 = 30,
 			z1 = 31,
+			z2 = 32,
 		};
 	}
 
@@ -54,14 +56,11 @@ namespace dxflib::entities
 
 		// public interface
 		const vertex& get_vertex(int id) const; // Returns the vertex given by it's id
-		void move_vertex(int id, const vertex& new_vertex); // sets the vertex given by id to new location
-		double get_thickness() const { return thickness_; } // Returns the thickness of the solid
-		double get_length() const { return length_; } // Returns the length of the solid
+
 	private:
 		// Properties
-		vertex v0_; // Starting Vertex
-		vertex v1_; // Ending Vertex
-		double thickness_; // Thickness of the solid
-		double length_; // distance from v0 to v1
+		vertex v0_; // First corner
+		vertex v1_; // Second corner
+		vertex v2_; // Third corner
 	};
 }

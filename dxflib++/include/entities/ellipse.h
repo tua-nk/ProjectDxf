@@ -61,9 +61,6 @@ namespace dxflib::entities
 		explicit ellipse(ellipse_buffer&);
 
 		// public interface
-		const vertex& get_vertex(int id) const; // Returns the vertex given by it's id
-		void move_vertex(int id, const vertex& new_vertex); // sets the vertex given by id to new location
-
 		const vertex& get_center_point() const { return center_point_; } // Returns the Center Point
 		const vertex& get_end_point() const { return center_point_; } // Returns the End Point
 		double get_ratio() const { return ratio_; } // Ratio the Radius
