@@ -19,26 +19,32 @@ int dxflib::entities::ellipse_buffer::parse(const std::string& cl, const std::st
 	{
 	case ellipse_codes::error:
 		return 0;
-	case ellipse_codes::thickness:
-		thickness = std::stod(nl);
+	case ellipse_codes::center_point_x:
+		center_point_x = std::stod(nl);
 		return 1;
-	case ellipse_codes::x0:
-		x0 = std::stod(nl);
+	case ellipse_codes::center_point_y:
+		center_point_y = std::stod(nl);
 		return 1;
-	case ellipse_codes::x1:
-		x1 = std::stod(nl);
+	case ellipse_codes::center_point_z:
+		center_point_z = std::stod(nl);
 		return 1;
-	case ellipse_codes::y0:
-		y0 = std::stod(nl);
+	case ellipse_codes::end_point_x:
+		end_point_x = std::stod(nl);
 		return 1;
-	case ellipse_codes::y1:
-		y1 = std::stod(nl);
+	case ellipse_codes::end_point_y:
+		end_point_y = std::stod(nl);
 		return 1;
-	case ellipse_codes::z0:
-		z0 = std::stod(nl);
+	case ellipse_codes::end_point_z:
+		end_point_z = std::stod(nl);
 		return 1;
-	case ellipse_codes::z1:
-		z1 = std::stod(nl);
+	case ellipse_codes::ratio:
+		ratio = std::stod(nl);
+		return 1;
+	case ellipse_codes::start_angle:
+		start_angle = std::stod(nl);
+		return 1;
+	case ellipse_codes::end_angle:
+		end_angle = std::stod(nl);
 		return 1;
 	default:
 		return 0;
@@ -48,45 +54,27 @@ int dxflib::entities::ellipse_buffer::parse(const std::string& cl, const std::st
 void dxflib::entities::ellipse_buffer::free()
 {
 	entity_buffer_base::free();
-	x0 = 0;
-	y0 = 0;
-	z0 = 0;
-	x1 = 0;
-	y1 = 0;
-	z1 = 0;
-	thickness = 0;
+	center_point_x = 0;
+	center_point_y = 0;
+	center_point_z = 0;
+	end_point_x = 0;
+	end_point_y = 0;
+	end_point_z = 0;
+	ratio = 0;
+	start_angle = 0;
+	end_angle = 0;
 }
 
 /**
  * \brief Ellipse buffer constructor for the ellipse entity
  * \param lb Ellipse Buffer
  */
-dxflib::entities::ellipse::ellipse(ellipse_buffer& lb) :
-	entity(lb),
-	v0_(lb.x0, lb.y0, lb.z0),
-	v1_(lb.x1, lb.y1, lb.z1),
-	thickness_(lb.thickness),
-	length_(mathlib::distance(v0_, v1_))
+dxflib::entities::ellipse::ellipse(ellipse_buffer& eb) :
+	entity(eb),
+	center_point_(eb.center_point_x, eb.center_point_y, eb.center_point_z),
+	end_point_(eb.end_point_x, eb.end_point_y, eb.end_point_z),
+	ratio_(eb.ratio),
+	start_angle_(eb.start_angle),
+	end_angle_(eb.end_angle)
 {
-}
-
-const dxflib::entities::vertex& dxflib::entities::ellipse::get_vertex(const int id) const
-{
-	switch (id)
-	{
-	case 0: return v0_;
-	case 1: return v1_;
-	default: return v0_;
-	}
-}
-
-void dxflib::entities::ellipse::move_vertex(const int id, const vertex& new_vertex)
-{
-	switch (id)
-	{
-	case 0: v0_ = new_vertex;
-	case 1: v1_ = new_vertex;
-	default: ;
-	}
-	length_ = mathlib::distance(v0_, v1_);
 }

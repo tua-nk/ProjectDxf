@@ -9,9 +9,15 @@ namespace dxflib::entities
 	*/
 	struct ellipse_buffer : entity_buffer_base
 	{
-		double x0, y0, z0;
-		double x1, y1, z1;
-		double thickness;
+		double center_point_x{};
+		double center_point_y{};
+		double center_point_z{};
+		double end_point_x{};
+		double end_point_y{};
+		double end_point_z{};
+		double ratio{};
+		double start_angle{};
+		double end_angle{};
 
 		/**
 		 * \brief Parse function for ellipse buffer
@@ -32,13 +38,15 @@ namespace dxflib::entities
 		{
 			subclassmarker = 100,
 			error = -1,
-			thickness = 39,
-			x0 = 10,
-			x1 = 11,
-			y0 = 20,
-			y1 = 21,
-			z0 = 30,
-			z1 = 31,
+			center_point_x = 10,
+			center_point_y = 20,
+			center_point_z = 30,
+			end_point_x = 11,
+			end_point_y = 21,
+			end_point_z = 31,
+			ratio = 40,
+			start_angle = 41,
+			end_angle = 42
 		};
 	}
 
@@ -55,13 +63,19 @@ namespace dxflib::entities
 		// public interface
 		const vertex& get_vertex(int id) const; // Returns the vertex given by it's id
 		void move_vertex(int id, const vertex& new_vertex); // sets the vertex given by id to new location
-		double get_thickness() const { return thickness_; } // Returns the thickness of the ellipse
-		double get_length() const { return length_; } // Returns the length of the ellipse
+
+		const vertex& get_center_point() const { return center_point_; } // Returns the Center Point
+		const vertex& get_end_point() const { return center_point_; } // Returns the End Point
+		double get_ratio() const { return ratio_; } // Ratio the Radius
+		double get_start_angle() const { return start_angle_; } // Returns the Start parameter
+		double get_end_angle() const { return end_angle_; } // Returns the End parameter
+
 	private:
 		// Properties
-		vertex v0_; // Starting Vertex
-		vertex v1_; // Ending Vertex
-		double thickness_; // Thickness of the ellipse
-		double length_; // distance from v0 to v1
+		vertex center_point_; // Starting Vertex
+		vertex end_point_; // Ending Vertex
+		double ratio_;
+		double start_angle_;
+		double end_angle_;
 	};
 }
