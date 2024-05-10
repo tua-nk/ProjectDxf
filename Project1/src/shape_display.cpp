@@ -87,6 +87,12 @@ void LinesDisplay::DrawLine(dvec3& start, dvec3& end, dvec4 color) {
     glBindVertexArray(0);
 }
 
+void LinesDisplay::DrawLine(const dxflib::entities::geoline& geoline, dvec4 color)
+{
+    dvec3 start(geoline[0].x, geoline[0].y, geoline[0].z), end(geoline[1].x, geoline[1].y, geoline[1].z);
+    DrawLine(start, end, color);
+}
+
 void LinesDisplay::DrawLine(const dxflib::entities::line& line, dvec4 color) {
     const auto& vstart = line.get_vertex(0), vend = line.get_vertex(1);
 

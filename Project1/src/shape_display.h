@@ -30,6 +30,7 @@ public:
     ~LinesDisplay();
     void DrawLine(const dxflib::entities::line& line, dvec4 color = { 1.0,1.0,1.0,1.0 });
     void DrawLine(dvec3& start, dvec3& end, dvec4 color = { 1.0,1.0,1.0,1.0 });
+    void DrawLine(const dxflib::entities::geoline& geoline, dvec4 color = { 1.0,1.0,1.0,1.0 });
     void Clear();
     void SetOffset(double x, double y);
     void SetScale(double s);

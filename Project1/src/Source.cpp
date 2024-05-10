@@ -328,6 +328,57 @@ void Play(GLFWwindow* window)
                         max_p.y = max(line.get_vertex(1).y, max_p.y);
                     }
 
+                    for (auto& lwpolyline : lwpolylines)
+                    {
+                        for (auto& line : lwpolyline.get_lines())
+                        {
+                            linesDisplay.DrawLine(line);
+                            min_p.x = min(line[0].x, min_p.x);
+                            min_p.x = min(line[1].x, min_p.x);
+                            min_p.y = min(line[0].y, min_p.y);
+                            min_p.y = min(line[1].y, min_p.y);
+
+                            max_p.x = max(line[0].x, max_p.x);
+                            max_p.x = max(line[1].x, max_p.x);
+                            max_p.y = max(line[0].y, max_p.y);
+                            max_p.y = max(line[1].y, max_p.y);
+                        }
+                    }
+
+                    for (auto& polyline : polylines)
+                    {
+                        for (auto& line : polyline.get_lines())
+                        {
+                            linesDisplay.DrawLine(line);
+                            min_p.x = min(line[0].x, min_p.x);
+                            min_p.x = min(line[1].x, min_p.x);
+                            min_p.y = min(line[0].y, min_p.y);
+                            min_p.y = min(line[1].y, min_p.y);
+
+                            max_p.x = max(line[0].x, max_p.x);
+                            max_p.x = max(line[1].x, max_p.x);
+                            max_p.y = max(line[0].y, max_p.y);
+                            max_p.y = max(line[1].y, max_p.y);
+                        }
+                    }
+
+                    for (auto& hatch : hatches)
+                    {
+                        for (auto& line : hatch.get_geolines())
+                        {
+                            linesDisplay.DrawLine(line);
+                            min_p.x = min(line[0].x, min_p.x);
+                            min_p.x = min(line[1].x, min_p.x);
+                            min_p.y = min(line[0].y, min_p.y);
+                            min_p.y = min(line[1].y, min_p.y);
+
+                            max_p.x = max(line[0].x, max_p.x);
+                            max_p.x = max(line[1].x, max_p.x);
+                            max_p.y = max(line[0].y, max_p.y);
+                            max_p.y = max(line[1].y, max_p.y);
+                        }
+                    }
+
                     for (auto& arc : arcs)
                     {
                         arcsDisplay.DrawArc(arc);
