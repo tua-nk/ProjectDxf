@@ -281,9 +281,18 @@ void Play(GLFWwindow* window)
                     std::wcout << szFile << std::endl;
                     dxflib::cadfile dxf(szFile);
 
-                    std::vector<dxflib::entities::line>& lines = dxf.get_lines();
+                    const std::vector<dxflib::entities::line>& lines = dxf.get_lines();
+                    const std::vector<dxflib::entities::lwpolyline>& lwpolylines = dxf.get_lwpolylines();
+                    const std::vector<dxflib::entities::polyline>& polylines = dxf.get_polylines();
+                    const std::vector<dxflib::entities::hatch>& hatches = dxf.get_hatches();
                     const std::vector<dxflib::entities::arc>& arcs = dxf.get_arcs();
                     const std::vector<dxflib::entities::circle>& circles = dxf.get_circles();
+                    const std::vector<dxflib::entities::point_base>& points = dxf.get_points();
+                    const std::vector<dxflib::entities::vertex>& vertexs = dxf.get_vertexs();
+                    const std::vector<dxflib::entities::solid>& solids = dxf.get_solids();
+                    const std::vector<dxflib::entities::solid3d>& solid3ds = dxf.get_solid3ds();
+                    const std::vector<dxflib::entities::ellipse>& ellipses = dxf.get_ellipses();
+                    const std::vector<dxflib::entities::spline>& splines = dxf.get_splines();
 
                     std::stringstream ss;
                     for (auto& line : lines)

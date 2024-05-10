@@ -87,7 +87,7 @@ void LinesDisplay::DrawLine(dvec3& start, dvec3& end, dvec4 color) {
     glBindVertexArray(0);
 }
 
-void LinesDisplay::DrawLine(dxflib::entities::line& line, dvec4 color) {
+void LinesDisplay::DrawLine(const dxflib::entities::line& line, dvec4 color) {
     const auto& vstart = line.get_vertex(0), vend = line.get_vertex(1);
 
     dvec3 start(vstart.x, vstart.y, vstart.z), end(vend.x, vend.y, vend.z);

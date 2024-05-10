@@ -30,15 +30,15 @@ namespace dxflib
 
 		// Public Interface
 		// Lines
-		std::vector<entities::line>& get_lines() { return lines_; }
+		const std::vector<entities::line>& get_lines() const { return lines_; }
 		// lwpolylines
-		std::vector<entities::lwpolyline>& get_lwpolylines() { return lwpolylines_; }
+		const std::vector<entities::lwpolyline>& get_lwpolylines() const { return lwpolylines_; }
 		// polylines
-		std::vector<entities::polyline>& get_polylines() { return polylines_; }
+		const std::vector<entities::polyline>& get_polylines() const { return polylines_; }
 		// hatches
-		std::vector<entities::hatch>& get_hatches() { return hatches_; }
+		const std::vector<entities::hatch>& get_hatches() const { return hatches_; }
 		// Text
-		std::vector<entities::text>& get_text() { return basic_text_; }
+		const std::vector<entities::text>& get_text() const { return basic_text_; }
 		// Arc
 		const std::vector<entities::arc>& get_arcs() const { return arcs_; }
 		// Circle
@@ -50,7 +50,7 @@ namespace dxflib
 		// Solid
 		const std::vector<entities::solid>& get_solids() const { return solids_; }
 		// Solid3d
-		const std::vector<entities::solid3d>& get_solid3d() const { return solid3ds_; }
+		const std::vector<entities::solid3d>& get_solid3ds() const { return solid3ds_; }
 		// Ellipse
 		const std::vector<entities::ellipse>& get_ellipses() const { return ellipses_; }
 		// Spline
