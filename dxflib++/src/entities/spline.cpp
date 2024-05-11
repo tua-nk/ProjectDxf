@@ -20,43 +20,25 @@ int dxflib::entities::spline_buffer::parse(const std::string& cl, const std::str
 	case spline_codes::error:
 		return 0;
 	case spline_codes::x0:
-		x0 = std::stod(nl);
-		return 1;
-	case spline_codes::x1:
-		x1 = std::stod(nl);
-		return 1;
-	case spline_codes::x2:
-		x2 = std::stod(nl);
-		return 1;
-	case spline_codes::x3:
-		x3 = std::stod(nl);
+		control_points_x.push_back(std::stod(nl));
 		return 1;
 	case spline_codes::y0:
-		y0 = std::stod(nl);
-		return 1;
-	case spline_codes::y1:
-		y1 = std::stod(nl);
-		return 1;
-	case spline_codes::y2:
-		y2 = std::stod(nl);
-		return 1;
-	case spline_codes::y3:
-		y3 = std::stod(nl);
+		control_points_y.push_back(std::stod(nl));
 		return 1;
 	case spline_codes::z0:
-		z0 = std::stod(nl);
+		control_points_z.push_back(std::stod(nl));
+		return 1;
+	case spline_codes::x1:
+		fit_points_x.push_back(std::stod(nl));
+		return 1;
+	case spline_codes::y1:
+		fit_points_y.push_back(std::stod(nl));
 		return 1;
 	case spline_codes::z1:
-		z1 = std::stod(nl);
+		fit_points_z.push_back(std::stod(nl));
 		return 1;
-	case spline_codes::z2:
-		z2 = std::stod(nl);
-		return 1;
-	case spline_codes::z3:
-		z3 = std::stod(nl);
-		return 1;
-	case spline_codes::knot_value:
-		knot_value = std::stod(nl);
+	case spline_codes::knot_values:
+		knot_values.push_back(std::stod(nl));
 		return 1;
 	case spline_codes::weight_value:
 		weight_value = std::stod(nl);
@@ -93,19 +75,13 @@ int dxflib::entities::spline_buffer::parse(const std::string& cl, const std::str
 void dxflib::entities::spline_buffer::free()
 {
 	entity_buffer_base::free();
-	x0 = 0;
-	y0 = 0;
-	z0 = 0;
-	x1 = 0;
-	y1 = 0;
-	z1 = 0;
-	x2 = 0;
-	y2 = 0;
-	z2 = 0;
-	x3 = 0;
-	y3 = 0;
-	z3 = 0;
-	knot_value = 0;
+	control_points_x.clear();
+	control_points_y.clear();
+	control_points_z.clear();
+	knot_values.clear();
+	fit_points_x.clear();
+	fit_points_y.clear();
+	fit_points_z.clear();
 	weight_value = 0;
 	knot_tolerance = 0;
 	control_point_tolerance = 0;
@@ -123,11 +99,6 @@ void dxflib::entities::spline_buffer::free()
  */
 dxflib::entities::spline::spline(spline_buffer& sb) :
 	entity(sb),
-	v0_(sb.x0, sb.y0, sb.z0),
-	v1_(sb.x1, sb.y1, sb.z1),
-	v2_(sb.x2, sb.y2, sb.z2),
-	v3_(sb.x3, sb.y3, sb.z3),
-	knot_value_(sb.knot_value),
 	weight_value_(sb.weight_value),
 	knot_tolerance_(sb.knot_tolerance),
 	control_point_tolerance_(sb.control_point_tolerance),
@@ -138,16 +109,16 @@ dxflib::entities::spline::spline(spline_buffer& sb) :
 	number_of_control_points_(sb.number_of_control_points),
 	number_of_fit_points_(sb.number_of_fit_points)
 {
-}
-
-const dxflib::entities::vertex& dxflib::entities::spline::get_vertex(const int id) const
-{
-	switch (id)
+	for (int i = 0; i < number_of_control_points_; i++)
 	{
-	case 0: return v0_;
-	case 1: return v1_;
-	case 2: return v2_;
-	case 3: return v3_;
-	default: return v0_;
+		control_points_.push_back(vertex(sb.control_points_x[i], sb.control_points_y[i], sb.control_points_z[i]));
+	}
+	for (int i = 0; i < number_of_knots_; i++)
+	{
+		knot_values_.push_back(sb.knot_values[i]);
+	}
+	for (int i = 0; i < number_of_fit_points_; i++)
+	{
+		fit_points_.push_back(vertex(sb.fit_points_x[i], sb.fit_points_y[i], sb.fit_points_z[i]));
 	}
 }
