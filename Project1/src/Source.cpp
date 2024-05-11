@@ -330,11 +330,11 @@ void Play(GLFWwindow* window)
                     }
                     for (auto& point : points)
                     {
-                        ss << "- Point (" << point.x << ", " << point.y << ", " << point.z << ")\n";
+                        ss << "- Point (" << point.x << ", " << point.y << ")\n";
                     }
                     for (auto& point : vertexs)
                     {
-                        ss << "- Vertex (" << point.x << ", " << point.y << ", " << point.z << ")\n";
+                        ss << "- Vertex (" << point.x << ", " << point.y << ")\n";
                     }
                     for (int i = 0; i < solids.size(); i++)
                     {
