@@ -362,6 +362,24 @@ void Play(GLFWwindow* window)
                         }
                     }
 
+                    for (auto& solid : solids)
+                    {
+                        linesDisplay.DrawLine(solid);
+                        min_p.x = min(solid.get_vertex(0).x, min_p.x);
+                        min_p.x = min(solid.get_vertex(1).x, min_p.x);
+                        min_p.x = min(solid.get_vertex(2).x, min_p.x);
+                        min_p.y = min(solid.get_vertex(0).y, min_p.y);
+                        min_p.y = min(solid.get_vertex(1).y, min_p.y);
+                        min_p.y = min(solid.get_vertex(2).y, min_p.y);
+
+                        max_p.x = max(solid.get_vertex(0).x, max_p.x);
+                        max_p.x = max(solid.get_vertex(1).x, max_p.x);
+                        max_p.x = max(solid.get_vertex(2).x, max_p.x);
+                        max_p.y = max(solid.get_vertex(0).y, max_p.y);
+                        max_p.y = max(solid.get_vertex(1).y, max_p.y);
+                        max_p.y = max(solid.get_vertex(2).y, max_p.y);
+                    }
+
                     for (auto& hatch : hatches)
                     {
                         for (auto& line : hatch.get_geolines())

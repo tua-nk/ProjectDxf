@@ -93,6 +93,18 @@ void LinesDisplay::DrawLine(const dxflib::entities::geoline& geoline, dvec4 colo
     DrawLine(start, end, color);
 }
 
+void LinesDisplay::DrawLine(const dxflib::entities::solid& solid, dvec4 color)
+{
+    dvec3 start1(solid.get_vertex(0).x, solid.get_vertex(0).y, solid.get_vertex(0).z), end1(solid.get_vertex(1).x, solid.get_vertex(1).y, solid.get_vertex(1).z);
+    DrawLine(start1, end1, color);
+
+    dvec3 start2(solid.get_vertex(1).x, solid.get_vertex(1).y, solid.get_vertex(1).z), end2(solid.get_vertex(2).x, solid.get_vertex(2).y, solid.get_vertex(2).z);
+    DrawLine(start2, end2, color);
+
+    dvec3 start3(solid.get_vertex(2).x, solid.get_vertex(2).y, solid.get_vertex(2).z), end3(solid.get_vertex(0).x, solid.get_vertex(0).y, solid.get_vertex(0).z);
+    DrawLine(start3, end3, color);
+}
+
 void LinesDisplay::DrawLine(const dxflib::entities::line& line, dvec4 color) {
     const auto& vstart = line.get_vertex(0), vend = line.get_vertex(1);
 
