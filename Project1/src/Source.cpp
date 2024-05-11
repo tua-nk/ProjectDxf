@@ -303,6 +303,22 @@ void Play(GLFWwindow* window)
                         ss << "- Line (" << line.get_vertex(0).x << ", " << line.get_vertex(0).y
                             << "), (" << line.get_vertex(0).x << ", " << line.get_vertex(1).y << ")\n";
                     }
+                    for (auto& lwpolyline : lwpolylines)
+                    {
+                        auto& lines = lwpolyline.get_lines();
+                        if (lines.size() > 0)
+                        {
+                            ss << "- lwpolyline (" << lines[0][0].x << ", " << lines[0][0].y << ")\n";
+                        }
+                    }
+                    for (auto& polyline : polylines)
+                    {
+                        auto& lines = polyline.get_lines();
+                        if (lines.size() > 0)
+                        {
+                            ss << "- polyline (" << lines[0][0].x << ", " << lines[0][0].y << ")\n";
+                        }
+                    }
                     for (auto& circle : circles)
                     {
                         ss << "- Circle (" << circle.get_center_point().x << ", " << circle.get_center_point().y << "), " << circle.get_radius() << "\n";
@@ -311,6 +327,26 @@ void Play(GLFWwindow* window)
                     {
                         ss << "- Arc (" << arc.get_center_point().x << ", " << arc.get_center_point().y << "), " << arc.get_radius()
                             << ", " << arc.get_start_angle() << ", " << arc.get_end_angle() << "\n";
+                    }
+                    for (auto& point : points)
+                    {
+                        ss << "- Point (" << point.x << ", " << point.y << ", " << point.z << ")\n";
+                    }
+                    for (auto& point : vertexs)
+                    {
+                        ss << "- Vertex (" << point.x << ", " << point.y << ", " << point.z << ")\n";
+                    }
+                    for (int i = 0; i < solids.size(); i++)
+                    {
+                        ss << "- Solid - " << i+1 << "\n";
+                    }
+                    for (int i = 0; i < solid3ds.size(); i++)
+                    {
+                        ss << "- 3DSolid - " << i+1 << "\n";
+                    }
+                    for (int i = 0; i < splines.size(); i++)
+                    {
+                        ss << "- Spline - " << i+1 << "\n";
                     }
 
                     imageInfo = ss.str();
@@ -456,7 +492,6 @@ void Play(GLFWwindow* window)
                     rotateCamera.SetCenter(dvec3(min_p + max_p) * 0.5);
                     viewDistance = glm::length(max_p - min_p);
                     rotateCamera.SetDistance(viewDistance);
-
                 }
             }
 
