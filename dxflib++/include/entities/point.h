@@ -61,5 +61,13 @@ namespace dxflib::entities
 		bool within(const polyline& pl) const;
 		bool within(const std::vector<geoline>& gl_vector) const;
 		bool operator==(const vertex& other) const;
+
+		// Operator overloads for point arithmetic
+		vertex operator+(const vertex& other) const {
+			return vertex(x + other.x, y + other.y, z + other.z);
+		}
+		vertex operator*(double scalar) const {
+			return vertex(x * scalar, y * scalar, z * scalar);
+		}
 	};
 }

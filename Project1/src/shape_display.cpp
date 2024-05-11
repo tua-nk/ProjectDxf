@@ -130,6 +130,50 @@ void LinesDisplay::DrawLine(const std::vector<dxflib::entities::vertex> vertexs,
     }
 }
 
+dxflib::entities::vertex evaluatePoint(const std::vector<dxflib::entities::vertex>& controlPoints, const std::vector<double>& knots, int degree, double t) {
+    std::vector<dxflib::entities::vertex> d(controlPoints);  // Working copy of control points
+    int n = controlPoints.size() - 1;
+    int k = degree;
+    
+    // Find the knot span that contains t
+    int i = k; // Start at first possible index
+    for (; i <= n; ++i) {
+        if (t < knots[i+1]) break;
+    }
+    if (i > n) i = n;  // Ensure i is within bounds if t is at the end of the knot vector
+
+    // De Boor's Algorithm: Compute the point on the curve at parameter t
+    for (int r = 1; r <= k; ++r) {
+        for (int j = i; j > i - k + r - 1; --j) {
+            if (j == 0) continue; // Prevent out-of-bounds access for d[j-1]
+            double alpha = (t - knots[j]) / (knots[j + k - r + 1] - knots[j]);
+            d[j] = d[j - 1] * (1 - alpha) + d[j] * alpha;
+        }
+    }
+    return d[i];
+}
+
+// Function to compute a series of points on the B-spline curve
+std::vector<dxflib::entities::vertex> computeBSplinePoints(const std::vector<dxflib::entities::vertex>& controlPoints, const std::vector<double>& knotVector, int degree, int numPoints) {
+    std::vector<dxflib::entities::vertex> curvePoints;
+    double t0 = knotVector[degree];
+    double t1 = knotVector[knotVector.size() - degree - 1];
+    double interval = (t1 - t0) / (numPoints - 1);
+
+    for (int i = 0; i < numPoints; ++i) {
+        double t = t0 + i * interval;
+        dxflib::entities::vertex pt = evaluatePoint(controlPoints, knotVector, degree, t);
+        curvePoints.push_back(pt);
+    }
+    return curvePoints;
+}
+
+void LinesDisplay::DrawLine(const dxflib::entities::spline spline, dvec4 color)
+{
+    std::vector<dxflib::entities::vertex> splinePoints = computeBSplinePoints(spline.get_control_points(), spline.get_knot_value(), spline.get_degree(), 100);
+    DrawLine(splinePoints, color);
+}
+
 void LinesDisplay::Clear() {
     glBindVertexArray(linesVAO);
     glBindBuffer(GL_ARRAY_BUFFER, linesVBO);

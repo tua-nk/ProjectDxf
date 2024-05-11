@@ -438,6 +438,21 @@ void Play(GLFWwindow* window)
                         max_p.x = max(circle.get_center_point().x, max_p.x);
                         max_p.y = max(circle.get_center_point().y, max_p.y);
                     }
+
+                    for (auto& spline : splines)
+                    {
+                        linesDisplay.DrawLine(spline);
+
+                        const std::vector<dxflib::entities::vertex> control_points = spline.get_control_points();
+                        for (int i = 0; i < control_points.size(); i++)
+                        {
+                            min_p.x = min(control_points[i].x, min_p.x);
+                            min_p.y = min(control_points[i].y, min_p.y);
+                            max_p.x = max(control_points[i].x, max_p.x);
+                            max_p.y = max(control_points[i].y, max_p.y);
+                        }
+                    }
+
                     rotateCamera.SetCenter(dvec3(min_p + max_p) * 0.5);
                     viewDistance = glm::length(max_p - min_p);
                     rotateCamera.SetDistance(viewDistance);

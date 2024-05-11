@@ -33,6 +33,7 @@ public:
     void DrawLine(const dxflib::entities::geoline& geoline, dvec4 color = { 1.0,1.0,1.0,1.0 });
     void DrawLine(const dxflib::entities::solid& solid, dvec4 color = { 1.0,1.0,1.0,1.0 });
     void DrawLine(const std::vector<dxflib::entities::vertex> vertexs, dvec4 color = { 1.0,1.0,1.0,1.0 });
+    void DrawLine(const dxflib::entities::spline spline, dvec4 color = { 1.0,1.0,1.0,1.0 });
     void Clear();
     void SetOffset(double x, double y);
     void SetScale(double s);
