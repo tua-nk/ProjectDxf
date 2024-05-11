@@ -164,6 +164,8 @@
     <None Include="res\axis.vs" />
     <None Include="res\line.fs" />
     <None Include="res\line.vs" />
+    <None Include="res\point.fs" />
+    <None Include="res\point.vs" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="3rdparty\imgui\imgui\misc\debuggers\imgui.natvis" />

@@ -87,6 +87,8 @@
     <None Include="res\arrow.gs" />
     <None Include="res\arrow.vs" />
     <None Include="res\arrow.fs" />
+    <None Include="res\point.fs" />
+    <None Include="res\point.vs" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="3rdparty\imgui\imgui\misc\debuggers\imgui.natvis" />

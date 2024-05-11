@@ -144,6 +144,139 @@ void LinesDisplay::SetScale(double s)
     offsetScaleMat[2][2] *= scale;
 }
 
+PointDisplay::PointDisplay()
+{
+    glGenVertexArrays(1, &pointVAO);
+
+    glGenBuffers(1, &pointVBO);
+
+    pointShader = CreateShaderProgram("point");
+
+    uniform_loc.projection = glGetUniformLocation(pointShader, "projMat");
+    uniform_loc.preRotTranslation = glGetUniformLocation(pointShader, "preRotMat");
+    uniform_loc.postRotTranslation = glGetUniformLocation(pointShader, "postRotMat");
+    uniform_loc.rotation = glGetUniformLocation(pointShader, "rotMat");
+    uniform_loc.offsetScale = glGetUniformLocation(pointShader, "offsetScaleMat");
+
+    offsetScaleMat = glm::identity<mat4>();
+    offsetX = 0;
+    offsetY = 0;
+    scale = 1.0;
+}
+
+PointDisplay::~PointDisplay()
+{
+    glDeleteVertexArrays(1, &pointVAO);
+    glDeleteProgram(pointShader);
+    glDeleteBuffers(1, &pointVBO);
+}
+
+void PointDisplay::DrawPoint(const dxflib::entities::point_base& point, dvec4 color)
+{
+    pointsData.push_back(point.x);
+    pointsData.push_back(point.y);
+    pointsData.push_back(point.z);
+
+    pointsData.push_back(color.r);
+    pointsData.push_back(color.g);
+    pointsData.push_back(color.b);
+    pointsData.push_back(color.a);
+
+    pointVaoElemCount += 1;
+
+    glBindVertexArray(pointVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, pointVBO);
+    glBufferData(GL_ARRAY_BUFFER, pointsData.size() * sizeof(double), pointsData.data(), GL_STATIC_DRAW);
+    glVertexAttribLPointer(0, 3, GL_DOUBLE, 7 * sizeof(double), 0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribLPointer(1, 4, GL_DOUBLE, 7 * sizeof(double), (void*)(3 * sizeof(double)));
+    glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
+
+void PointDisplay::DrawPoint(const dxflib::entities::vertex& point, dvec4 color)
+{
+    pointsData.push_back(point.x);
+    pointsData.push_back(point.y);
+    pointsData.push_back(point.z);
+
+    pointsData.push_back(color.r);
+    pointsData.push_back(color.g);
+    pointsData.push_back(color.b);
+    pointsData.push_back(color.a);
+
+    pointVaoElemCount += 1;
+
+    glBindVertexArray(pointVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, pointVBO);
+    glBufferData(GL_ARRAY_BUFFER, pointsData.size() * sizeof(double), pointsData.data(), GL_STATIC_DRAW);
+    glVertexAttribLPointer(0, 3, GL_DOUBLE, 7 * sizeof(double), 0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribLPointer(1, 4, GL_DOUBLE, 7 * sizeof(double), (void*)(3 * sizeof(double)));
+    glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
+
+void PointDisplay::Clear()
+{
+    glBindVertexArray(pointVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, pointVBO);
+
+    glBufferData(GL_ARRAY_BUFFER, pointsData.size() * sizeof(double), nullptr, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    pointsData.clear();
+}
+
+void PointDisplay::SetOffset(double x, double y)
+{
+    offsetX = x;
+    offsetY = y;
+    //offsetScaleMat = glm::translate(glm::vec3(-offsetX,-offsetY,0)) * glm::scale(glm::vec3(scale));
+    offsetScaleMat = glm::translate(glm::vec3(-offsetX, -offsetY, 0));
+    offsetScaleMat[0][0] *= scale;
+    offsetScaleMat[1][1] *= scale;
+    offsetScaleMat[2][2] *= scale;
+}
+
+void PointDisplay::SetScale(double s)
+{
+    scale = s;
+    //offsetScaleMat = glm::translate(glm::vec3(-offsetX,-offsetY,0)) * glm::scale(glm::vec3(scale));
+    offsetScaleMat = glm::translate(glm::vec3(-offsetX, -offsetY, 0));
+    offsetScaleMat[0][0] *= scale;
+    offsetScaleMat[1][1] *= scale;
+    offsetScaleMat[2][2] *= scale;
+}
+
+void PointDisplay::Display(RotateCamera& camera)
+{
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_PROGRAM_POINT_SIZE);
+    glDepthFunc(GL_LESS);
+
+    glBindVertexArray(pointVAO);
+    glUseProgram(pointShader);
+
+    glUniformMatrix4fv(uniform_loc.projection, 1, GL_FALSE, &camera.projMat[0][0]);
+    glUniformMatrix4fv(uniform_loc.rotation, 1, GL_FALSE, &camera.rotMat[0][0]);
+    glUniformMatrix4fv(uniform_loc.postRotTranslation, 1, GL_FALSE, &camera.postRotTransMat[0][0]);
+    glUniformMatrix4fv(uniform_loc.preRotTranslation, 1, GL_FALSE, &camera.preRotTransMat[0][0]);
+    glUniformMatrix4fv(uniform_loc.offsetScale, 1, GL_FALSE, &offsetScaleMat[0][0]);
+
+    glLineWidth(1);
+    glDrawArrays(GL_POINTS, 0, pointVaoElemCount);
+}
+
 RotateCamera::RotateCamera()
 {
     projMat = mat4(0.0);

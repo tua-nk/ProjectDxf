@@ -50,6 +50,30 @@ private:
     double scale, offsetX, offsetY;
 };
 
+class PointDisplay {
+public:
+    PointDisplay();
+    ~PointDisplay();
+    void DrawPoint(const dxflib::entities::point_base& point, dvec4 color = { 1.0,1.0,1.0,1.0 });
+    void DrawPoint(const dxflib::entities::vertex& point, dvec4 color = { 1.0,1.0,1.0,1.0 });
+    void Clear();
+    void SetOffset(double x, double y);
+    void SetScale(double s);
+    void Display(RotateCamera& camera);
+
+    int pointVaoElemCount = 0;
+private:
+    GLuint pointVAO, pointShader, pointVBO;
+    std::vector<double> pointsData;
+
+    struct {
+        GLuint rotation, preRotTranslation, postRotTranslation, projection, offsetScale;
+    }uniform_loc;
+
+    mat4 offsetScaleMat;
+    double scale, offsetX, offsetY;
+};
+
 class ArcsDisplay {
 public:
     ArcsDisplay();

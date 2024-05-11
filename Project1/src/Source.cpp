@@ -184,6 +184,7 @@ void Play(GLFWwindow* window)
     WindowInfo* winInfo = static_cast<WindowInfo*>(glfwGetWindowUserPointer(window));
     LinesDisplay linesDisplay;
     ArcsDisplay arcsDisplay;
+    PointDisplay pointDisplay;
 
     RotateCamera rotateCamera;
 
@@ -259,6 +260,7 @@ void Play(GLFWwindow* window)
         linesDisplay.Display(rotateCamera);
         arcsDisplay.Display(rotateCamera);
         axisDisplay.Display(rotateCamera);
+        pointDisplay.Display(rotateCamera);
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -277,6 +279,7 @@ void Play(GLFWwindow* window)
                 {
                     linesDisplay.Clear();
                     arcsDisplay.Clear();
+                    pointDisplay.Clear();
 
                     std::wcout << szFile << std::endl;
                     dxflib::cadfile dxf(szFile);
@@ -395,6 +398,26 @@ void Play(GLFWwindow* window)
                             max_p.y = max(line[0].y, max_p.y);
                             max_p.y = max(line[1].y, max_p.y);
                         }
+                    }
+
+                    for (auto& point : points)
+                    {
+                        pointDisplay.DrawPoint(point);
+
+                        min_p.x = min(point.x, min_p.x);
+                        min_p.y = min(point.y, min_p.y);
+                        max_p.x = max(point.x, max_p.x);
+                        max_p.y = max(point.y, max_p.y);
+                    }
+
+                    for (auto& point : vertexs)
+                    {
+                        pointDisplay.DrawPoint(point);
+
+                        min_p.x = min(point.x, min_p.x);
+                        min_p.y = min(point.y, min_p.y);
+                        max_p.x = max(point.x, max_p.x);
+                        max_p.y = max(point.y, max_p.y);
                     }
 
                     for (auto& arc : arcs)
