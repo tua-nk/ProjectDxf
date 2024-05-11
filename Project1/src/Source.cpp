@@ -410,10 +410,9 @@ void Play(GLFWwindow* window)
                         max_p.y = max(point.y, max_p.y);
                     }
 
+                    linesDisplay.DrawLine(vertexs);
                     for (auto& point : vertexs)
                     {
-                        pointDisplay.DrawPoint(point);
-
                         min_p.x = min(point.x, min_p.x);
                         min_p.y = min(point.y, min_p.y);
                         max_p.x = max(point.x, max_p.x);

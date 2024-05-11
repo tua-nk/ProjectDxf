@@ -112,6 +112,24 @@ void LinesDisplay::DrawLine(const dxflib::entities::line& line, dvec4 color) {
     DrawLine(start, end, color);
 }
 
+void LinesDisplay::DrawLine(const std::vector<dxflib::entities::vertex> vertexs, dvec4 color)
+{
+    for (int i = 0; i < vertexs.size(); i++)
+    {
+        dvec3 start(vertexs[i].x, vertexs[i].y, vertexs[i].z);
+        dvec3 end;
+        if (i != vertexs.size() - 1)
+        {
+            end = dvec3(vertexs[i+1].x, vertexs[i+1].y, vertexs[i+1].z);
+        }
+        else
+        {
+            end = dvec3(vertexs[0].x, vertexs[0].y, vertexs[0].z);
+        }
+        DrawLine(start, end, color);
+    }
+}
+
 void LinesDisplay::Clear() {
     glBindVertexArray(linesVAO);
     glBindBuffer(GL_ARRAY_BUFFER, linesVBO);
@@ -172,33 +190,6 @@ PointDisplay::~PointDisplay()
 }
 
 void PointDisplay::DrawPoint(const dxflib::entities::point_base& point, dvec4 color)
-{
-    pointsData.push_back(point.x);
-    pointsData.push_back(point.y);
-    pointsData.push_back(point.z);
-
-    pointsData.push_back(color.r);
-    pointsData.push_back(color.g);
-    pointsData.push_back(color.b);
-    pointsData.push_back(color.a);
-
-    pointVaoElemCount += 1;
-
-    glBindVertexArray(pointVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, pointVBO);
-    glBufferData(GL_ARRAY_BUFFER, pointsData.size() * sizeof(double), pointsData.data(), GL_STATIC_DRAW);
-    glVertexAttribLPointer(0, 3, GL_DOUBLE, 7 * sizeof(double), 0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribLPointer(1, 4, GL_DOUBLE, 7 * sizeof(double), (void*)(3 * sizeof(double)));
-    glEnableVertexAttribArray(1);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
-void PointDisplay::DrawPoint(const dxflib::entities::vertex& point, dvec4 color)
 {
     pointsData.push_back(point.x);
     pointsData.push_back(point.y);
