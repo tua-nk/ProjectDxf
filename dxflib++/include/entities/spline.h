@@ -16,15 +16,15 @@ namespace dxflib::entities
 		std::vector<double> fit_points_x;        //11
 		std::vector<double> fit_points_y;        //21
 		std::vector<double> fit_points_z;        //31
-		double weight_value;                     //41
-		double knot_tolerance;                   //42
-		double control_point_tolerance;          //43
-		double fit_tolerance;                    //44
-		int flag;                                //70
-		int degree;                              //71
-		int number_of_knots;                     //72
-		int number_of_control_points;            //73
-		int number_of_fit_points;                //74
+		double weight_value{};                   //41
+		double knot_tolerance{};                 //42
+		double control_point_tolerance{};        //43
+		double fit_tolerance{};                  //44
+		int flag{};                              //70
+		int degree{};                            //71
+		int number_of_knots{};                   //72
+		int number_of_control_points{};          //73
+		int number_of_fit_points{};              //74
 
 		/**
 		 * \brief Parse function for spline buffer

@@ -356,7 +356,7 @@ void Play(GLFWwindow* window)
 
                     imageInfo = ss.str();
 
-                    dvec3 min_p{}, max_p{};
+                    dvec3 min_p{ DBL_MAX, DBL_MAX, 0 }, max_p{ DBL_MIN, DBL_MIN, 0 };
 
                     for (auto& line : lines)
                     {
@@ -496,12 +496,13 @@ void Play(GLFWwindow* window)
 
                     for (auto& helix : helixes)
                     {
+                        if (helix.get_number_of_turns() < 1) continue;
                         linesDisplay.DrawLine(helix);
 
-                        min_p.x = min(helix.get_axis_base_point().x-helix.get_radius(), min_p.x);
-                        min_p.y = min(helix.get_axis_base_point().y-helix.get_radius(), min_p.y);
-                        max_p.x = max(helix.get_axis_base_point().x+helix.get_radius(), max_p.x);
-                        max_p.y = max(helix.get_axis_base_point().y+helix.get_radius(), max_p.y);
+                        min_p.x = min(helix.get_start_point().x-helix.get_radius(), min_p.x);
+                        min_p.y = min(helix.get_start_point().y-helix.get_radius(), min_p.y);
+                        max_p.x = max(helix.get_start_point().x+helix.get_radius(), max_p.x);
+                        max_p.y = max(helix.get_start_point().y+helix.get_radius(), max_p.y);
                     }
 
                     rotateCamera.SetCenter(dvec3(min_p + max_p) * 0.5);

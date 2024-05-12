@@ -9,9 +9,9 @@ namespace dxflib::entities
 	*/
 	struct solid3d_buffer : entity_buffer_base
 	{
-		double x0, y0, z0;
-		double x1, y1, z1;
-		double thickness;
+		double x0{}, y0{}, z0{};
+		double x1{}, y1{}, z1{};
+		double thickness{};
 
 		/**
 		 * \brief Parse function for solid3d buffer

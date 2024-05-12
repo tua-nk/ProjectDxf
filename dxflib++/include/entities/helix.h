@@ -9,14 +9,14 @@ namespace dxflib::entities
 	*/
 	struct helix_bufer : entity_buffer_base
 	{
-		double x0, y0, z0;
-		double x1, y1, z1;
-		double x2, y2, z2;
-		double radius;
-		int number_of_turns;
-		double turn_height;
-		int constrain_type;
-		int handedness;
+		double x0{}, y0{}, z0{};
+		double x1{}, y1{}, z1{};
+		double x2{}, y2{}, z2{};
+		double radius{};
+		int number_of_turns{};
+		double turn_height{};
+		int constrain_type{};
+		int handedness{};
 		/**
 		 * \brief Parse function for helix buffer
 		 * \param cl Current Solid
