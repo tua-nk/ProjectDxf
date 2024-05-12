@@ -114,18 +114,11 @@ void LinesDisplay::DrawLine(const dxflib::entities::line& line, dvec4 color) {
 
 void LinesDisplay::DrawLine(const std::vector<dxflib::entities::vertex> vertexs, dvec4 color)
 {
-    for (int i = 0; i < vertexs.size(); i++)
+    if (vertexs.size() < 2) return;
+    for (int i = 0; i < vertexs.size()-1; i++)
     {
-        dvec3 start(vertexs[i].x, vertexs[i].y, vertexs[i].z);
-        dvec3 end;
-        if (i != vertexs.size() - 1)
-        {
-            end = dvec3(vertexs[i+1].x, vertexs[i+1].y, vertexs[i+1].z);
-        }
-        else
-        {
-            end = dvec3(vertexs[0].x, vertexs[0].y, vertexs[0].z);
-        }
+        dvec3 start(vertexs[i  ].x, vertexs[i  ].y, vertexs[i  ].z);
+        dvec3 end  (vertexs[i+1].x, vertexs[i+1].y, vertexs[i+1].z);
         DrawLine(start, end, color);
     }
 }
@@ -172,6 +165,74 @@ void LinesDisplay::DrawLine(const dxflib::entities::spline spline, dvec4 color)
 {
     std::vector<dxflib::entities::vertex> splinePoints = computeBSplinePoints(spline.get_control_points(), spline.get_knot_value(), spline.get_degree(), 100);
     DrawLine(splinePoints, color);
+}
+
+//std::vector<dxflib::entities::vertex> generateHelixPoints(float radius, float turnHeight, int numTurns, const dxflib::entities::vertex& start_point, const dxflib::entities::vertex& axisBase, const dxflib::entities::vertex& axisVector) {
+//    std::vector<dxflib::entities::vertex> points;
+//    float angleIncrement = 2.0f * dxflib::mathlib::pi;
+//    int totalSteps = numTurns * 100;
+//    float heightIncrement = turnHeight / 100;
+//
+//    // Normalize axis vector
+//    glm::vec3 normAxis = glm::normalize(glm::vec3(axisVector.x, axisVector.y, axisVector.z));
+//    glm::vec3 zAxis = glm::vec3(0, 0, 1);
+//
+//    // Calculate quaternion for rotation from z-axis to normAxis
+//    glm::quat rotationQuat = glm::rotation(zAxis, normAxis);
+//
+//    // Convert quaternion to rotation matrix
+//    glm::mat4 rotationMatrix = glm::toMat4(rotationQuat);
+//
+//    // Calculate translation to move helix base to axisBase
+//    glm::vec3 translation = glm::vec3(axisBase.x - start_point.x, axisBase.y - start_point.y, axisBase.z - start_point.z);
+//
+//    for (int i = 0; i <= totalSteps; ++i) {
+//        float currentAngle = i * angleIncrement / 100;
+//        glm::vec4 pLocal = glm::vec4(radius * cos(currentAngle), radius * sin(currentAngle), i * heightIncrement, 1.0);
+//        glm::vec4 pWorld = rotationMatrix * pLocal + glm::vec4(translation, 0.0);
+//
+//        points.push_back(dxflib::entities::vertex{ pWorld.x, pWorld.y, pWorld.z });
+//    }
+//    return points;
+//}
+std::vector<dxflib::entities::vertex> generateHelixPoints(float radius, float turnHeight, int numTurns, const dxflib::entities::vertex& start_point, const dxflib::entities::vertex& axisBase, const dxflib::entities::vertex& axisVector, bool isRightHanded) {
+    std::vector<dxflib::entities::vertex> points;
+    float angleIncrement = 2.0f * dxflib::mathlib::pi;
+    int totalSteps = numTurns * 100;
+    float heightIncrement = turnHeight / 100;
+
+    // Normalize axis vector
+    glm::vec3 normAxis = glm::normalize(glm::vec3(axisVector.x, axisVector.y, axisVector.z));
+    glm::vec3 zAxis = glm::vec3(0, 0, 1);
+
+    // Calculate quaternion for rotation from z-axis to normAxis
+    glm::quat rotationQuat = glm::rotation(zAxis, normAxis);
+
+    // Convert quaternion to rotation matrix
+    glm::mat4 rotationMatrix = glm::toMat4(rotationQuat);
+
+    // Calculate translation to move helix start to start_point
+    glm::vec3 translation = glm::vec3(start_point.x - axisBase.x, start_point.y - axisBase.y, start_point.z - axisBase.z);
+
+    // Adjust the angle increment based on the handedness
+    if (!isRightHanded) {
+        angleIncrement = -angleIncrement;  // Reverse the direction for left-handed helix
+    }
+
+    for (int i = 0; i <= totalSteps; ++i) {
+        float currentAngle = i * angleIncrement / 100;
+        glm::vec4 pLocal = glm::vec4(radius * cos(currentAngle), radius * sin(currentAngle), i * heightIncrement, 1.0);
+        glm::vec4 pWorld = rotationMatrix * pLocal + glm::vec4(translation, 0.0) + glm::vec4(axisBase.x, axisBase.y, axisBase.z, 0.0);
+
+        points.push_back(dxflib::entities::vertex{ pWorld.x, pWorld.y, pWorld.z });
+    }
+    return points;
+}
+
+void LinesDisplay::DrawLine(const dxflib::entities::helix helix, dvec4 color)
+{
+    std::vector<dxflib::entities::vertex> helixPoints = generateHelixPoints(helix.get_radius(), helix.get_turn_height(), helix.get_number_of_turns(), helix.get_start_point(), helix.get_axis_base_point(), helix.get_axis_vector(), helix.get_handedness());
+    DrawLine(helixPoints, color);
 }
 
 void LinesDisplay::Clear() {

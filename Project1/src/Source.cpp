@@ -296,6 +296,7 @@ void Play(GLFWwindow* window)
                     const std::vector<dxflib::entities::solid3d>& solid3ds = dxf.get_solid3ds();
                     const std::vector<dxflib::entities::ellipse>& ellipses = dxf.get_ellipses();
                     const std::vector<dxflib::entities::spline>& splines = dxf.get_splines();
+                    const std::vector<dxflib::entities::helix>& helixes = dxf.get_helixes();
 
                     std::stringstream ss;
                     for (auto& line : lines)
@@ -347,6 +348,10 @@ void Play(GLFWwindow* window)
                     for (int i = 0; i < splines.size(); i++)
                     {
                         ss << "- Spline - " << i+1 << "\n";
+                    }
+                    for (int i = 0; i < helixes.size(); i++)
+                    {
+                        ss << "- Helix - " << i + 1 << "\n";
                     }
 
                     imageInfo = ss.str();
@@ -487,6 +492,16 @@ void Play(GLFWwindow* window)
                             max_p.x = max(control_points[i].x, max_p.x);
                             max_p.y = max(control_points[i].y, max_p.y);
                         }
+                    }
+
+                    for (auto& helix : helixes)
+                    {
+                        linesDisplay.DrawLine(helix);
+
+                        min_p.x = min(helix.get_axis_base_point().x-helix.get_radius(), min_p.x);
+                        min_p.y = min(helix.get_axis_base_point().y-helix.get_radius(), min_p.y);
+                        max_p.x = max(helix.get_axis_base_point().x+helix.get_radius(), max_p.x);
+                        max_p.y = max(helix.get_axis_base_point().y+helix.get_radius(), max_p.y);
                     }
 
                     rotateCamera.SetCenter(dvec3(min_p + max_p) * 0.5);

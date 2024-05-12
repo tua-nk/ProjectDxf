@@ -23,6 +23,7 @@ namespace dxflib::entities
 		solid3d,
 		ellipse,
 		spline,
+		helix,
 		all
 	};
 

@@ -6,6 +6,7 @@
 #include "entities/text.h"
 #include "entities/arc.h"
 #include "entities/circle.h"
+#include "entities/helix.h"
 #include <fstream>
 #include <string>
 
@@ -75,6 +76,7 @@ void dxflib::cadfile::parse_data()
 	entities::solid3d_buffer s3b;    // Solid3d Buffer
 	entities::ellipse_buffer eb;     // Ellipse Buffer
 	entities::spline_buffer slb;     // Spline Buffer
+	entities::helix_bufer hlb;        // Helix Buffer
 
 	for (int linenum{0}; linenum < static_cast<int>(data_.size()) - 1; ++linenum)
 	{
@@ -165,6 +167,12 @@ void dxflib::cadfile::parse_data()
 				current_entity = entities::entity_types::spline;
 				continue;
 			}
+			if (cl == start_markers.helix)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::helix;
+				continue;
+			}
 		}
 		/*
 		 * Extraction Path - While the extraction flag is true and the current entity
@@ -225,6 +233,10 @@ void dxflib::cadfile::parse_data()
 				break;
 			case entities::entity_types::spline:
 				if (slb.parse(cl, nl))
+					linenum++;
+				break;
+			case entities::entity_types::helix:
+				if (hlb.parse(cl, nl))
 					linenum++;
 				break;
 			default:
@@ -302,6 +314,11 @@ void dxflib::cadfile::parse_data()
 			case entities::entity_types::spline:
 				splines_.emplace_back(slb);
 				slb.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::helix:
+				helixes_.emplace_back(hlb);
+				hlb.free();
 				extraction_flag = false;
 				break;
 			case entities::entity_types::all:

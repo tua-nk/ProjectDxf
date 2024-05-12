@@ -56,6 +56,8 @@ namespace dxflib
 		const std::vector<entities::ellipse>& get_ellipses() const { return ellipses_; }
 		// Spline
 		const std::vector<entities::spline>& get_splines() const { return splines_; }
+		// Helix
+		const std::vector<entities::helix>& get_helixes() const { return helixes_; }
 		// Filename of the DXF file
 		std::string get_filename() const { return std::string{filename_}; }
 		// DXF Data
@@ -76,6 +78,7 @@ namespace dxflib
 		std::vector<entities::solid3d> solid3ds_; // 3DSOLID Entities
 		std::vector<entities::ellipse> ellipses_; // ELLIPSE Entities
 		std::vector<entities::spline> splines_; // SPLINE Entities
+		std::vector<entities::helix> helixes_; // HELIX Entities
 
 		void read_file(); // Reads the file that is stored in filename_
 		void parse_data(); // Main parse function for the dxf file: iterates through the data_ vector and
@@ -115,6 +118,7 @@ namespace dxflib
 			const char* solid3d{ "3DSOLID" };
 			const char* ellipse{ "ELLIPSE" };
 			const char* spline{ "SPLINE" };
+			const char* helix{ "HELIX" };
 		};
 	}
 }
