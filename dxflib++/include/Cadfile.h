@@ -12,6 +12,7 @@
 #include "entities/solid.h"
 #include "entities/ellipse.h"
 #include "entities/spline.h"
+#include "entities/helix.h"
 #include <vector>
 
 namespace dxflib

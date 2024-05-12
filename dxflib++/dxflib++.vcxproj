@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="include\app.h" />
     <ClInclude Include="include\Cadfile.h" />
+    <ClInclude Include="include\entities\helix.h" />
     <ClInclude Include="include\entities\solid3d.h" />
     <ClInclude Include="include\entities\arc.h" />
     <ClInclude Include="include\entities\circle.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="src\entities\ellipse.cpp" />
     <ClCompile Include="src\entities\entitiy.cpp" />
     <ClCompile Include="src\entities\hatch.cpp" />
+    <ClCompile Include="src\entities\helix.cpp" />
     <ClCompile Include="src\entities\line.cpp" />
     <ClCompile Include="src\entities\lwpolyline.cpp" />
     <ClCompile Include="src\entities\point.cpp" />
